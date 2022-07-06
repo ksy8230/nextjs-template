@@ -30,7 +30,7 @@ export default function Home() {
   // }, [dispatch]);
 
   useEffect(() => {
-    dispatch(counterActions.getAsync());
+    // dispatch(counterActions.getAsync());
   }, []);
 
   return (
