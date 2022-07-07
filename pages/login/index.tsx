@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ReactElement, SyntheticEvent } from "react";
+import { ReactElement, SyntheticEvent, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import PublicLayout from "../../components/PublicLayout";
 import { AppDispatch } from "../../store";
@@ -21,9 +21,26 @@ export default function Login() {
     postLogin(form);
     // dispatch(userActions.login(form));
   };
+
+  // 로그인 호출
   const postLogin = async (data: any) => {
     try {
-      const res = await axios.post("/login/", data, {
+      const res = await axios.post(
+        "http://localhost:8000/account/login/",
+        data,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  // 사용자 호출
+  const getUser = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/account/user_list/", {
         withCredentials: true,
       });
       console.log(res);
@@ -31,6 +48,11 @@ export default function Login() {
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <div>
       <form onSubmit={onSubmit}>
