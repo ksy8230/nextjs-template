@@ -1,3 +1,4 @@
+import axios from "axios";
 import { ReactElement, SyntheticEvent } from "react";
 import { useDispatch } from "react-redux";
 import PublicLayout from "../../components/PublicLayout";
@@ -17,7 +18,18 @@ export default function Login() {
       password: target.password.value,
     };
     console.log(form);
-    dispatch(userActions.login(form));
+    postLogin(form);
+    // dispatch(userActions.login(form));
+  };
+  const postLogin = async (data: any) => {
+    try {
+      const res = await axios.post("/login/", data, {
+        withCredentials: true,
+      });
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
   };
   return (
     <div>
