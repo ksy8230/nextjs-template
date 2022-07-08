@@ -36,7 +36,13 @@ function apiRequestProtocol() {
 
 const socialApiClient = apiRequestProtocol() as AxiosInstance;
 
-const NoAuthURL = ["/v1/config/password", "/v1/token", "/v1/token/refresh"];
+const NoAuthURL = [
+  "/account/login/",
+  "/account/register/",
+  "/v1/config/password",
+  "/v1/token",
+  "/v1/token/refresh",
+];
 
 socialApiClient?.interceptors.request.use(async function (
   config: AxiosRequestConfig

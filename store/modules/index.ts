@@ -1,6 +1,7 @@
 import { AnyAction, combineReducers } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 import counter from "./counter";
+import users from "./users/index";
 
 export interface IUser {
   isLoggedIn: boolean;
@@ -21,7 +22,7 @@ export interface ICounter {
 }
 
 export interface State {
-  users: IUser;
+  users: any;
   posts: IPost;
   counter: ICounter;
 }
@@ -35,6 +36,7 @@ const rootReducer = (state: State | undefined, action: AnyAction) => {
   }
   return combineReducers({
     counter,
+    users,
     // 여기에 추가
   })(state, action);
 };

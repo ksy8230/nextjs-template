@@ -48,6 +48,9 @@ export default function Login() {
       console.error(e);
     }
   };
+  useEffect(() => {
+    // getUser();
+  }, []);
 
   return (
     <div>

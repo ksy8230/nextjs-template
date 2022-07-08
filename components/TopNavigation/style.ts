@@ -23,7 +23,7 @@ export const ModalContent = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 25rem;
+  max-width: 25rem;
   max-height: 25rem;
   background-color: #fff;
   border-radius: 0.938rem;
@@ -52,5 +52,11 @@ export const LoginContainer = styled.div`
     &:focus-visible {
       border: 2px solid #2a68dd;
     }
+  }
+`;
+
+export const SignUpContainer = styled.div`
+  .custom-text-field {
+    margin-bottom: 1rem;
   }
 `;

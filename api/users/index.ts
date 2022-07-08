@@ -7,7 +7,7 @@ import { AxiosResponse } from "axios";
 
 export const api = {
   login(data: TLoginData) {
-    return socialApiClient.post("/v1/token", data);
+    return socialApiClient.post("/account/login/", data);
   },
 
   async validToken() {
@@ -75,5 +75,13 @@ export const api = {
       csrftoken = parts.pop().split(";").shift();
     }
     return { csrftoken };
+  },
+
+  register(data: any) {
+    return socialApiClient.post("/account/register/", data);
+  },
+
+  whoIam() {
+    return socialApiClient.get("/account/whoIam/");
   },
 };

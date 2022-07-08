@@ -12,4 +12,7 @@ export type TUser = {
 
 export interface UserState {
   user: TUser | null;
+  me: any;
+  isLoading: boolean;
+  error: string;
 }

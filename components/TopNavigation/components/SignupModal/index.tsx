@@ -5,7 +5,7 @@ import { ModalContent, SignUpContainer } from "../../style";
 import TextField from "@mui/material/TextField";
 import { ISubmitFormModal } from "../types";
 
-const LoginModal = ({ openModal, onClose, onSubmit }: ISubmitFormModal) => {
+const SignupModal = ({ openModal, onClose, onSubmit }: ISubmitFormModal) => {
   return (
     <Modal
       open={openModal}
@@ -31,8 +31,22 @@ const LoginModal = ({ openModal, onClose, onSubmit }: ISubmitFormModal) => {
               fullWidth
               className="custom-text-field"
             />
+            <TextField
+              id="name"
+              label="name"
+              variant="outlined"
+              fullWidth
+              className="custom-text-field"
+            />
+            <TextField
+              id="email"
+              label="email"
+              variant="outlined"
+              fullWidth
+              className="custom-text-field"
+            />
             <Button type="submit" variant="contained" fullWidth>
-              Login
+              Sign Up
             </Button>
           </form>
         </SignUpContainer>
@@ -41,4 +55,4 @@ const LoginModal = ({ openModal, onClose, onSubmit }: ISubmitFormModal) => {
   );
 };
 
-export default LoginModal;
+export default SignupModal;

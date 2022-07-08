@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ReactElement, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout";
-import * as counterActions from "../../store/modules/counter";
+import * as userActions from "../../store/modules/users/index";
 import apis from "../../api";
 import { AppDispatch } from "../../store";
 import {
@@ -31,6 +31,20 @@ export default function Home() {
 
   useEffect(() => {
     // dispatch(counterActions.getAsync());
+  }, []);
+
+  // 유저 호출 함수
+  const getWhoIam = async () => {
+    try {
+      const res = await apis.usersApi.whoIam();
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(userActions.whoIam());
   }, []);
 
   return (

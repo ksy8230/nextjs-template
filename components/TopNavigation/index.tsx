@@ -1,15 +1,20 @@
 import Link from "next/link";
-import React, { SyntheticEvent, useState } from "react";
-import { LoginContainer, ModalContent, Nav, NavContainer } from "./style";
+import React, { SyntheticEvent, useEffect, useState } from "react";
+import { Nav, NavContainer } from "./style";
 import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
-import axios from "axios";
+import SignupModal from "./components/SignupModal";
+import LoginModal from "./components/LoginModal";
+import apis from "../../api";
+import Router from "next/router";
 
 const TopNavigation = () => {
-  const [openLoginModal, setOpenLoginModal] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState(false);
 
-  const handleOpen = () => setOpenLoginModal(true);
-  const handleClose = () => setOpenLoginModal(false);
+  const handleOpenLogin = () => setOpenLogin(true);
+  const handleCloseLogin = () => setOpenLogin(false);
+  const handleOpenSignUp = () => setOpenSignUp(true);
+  const handleCloseSignUp = () => setOpenSignUp(false);
 
   // 로그인 폼 전송
   const onSubmit = (e: SyntheticEvent) => {
@@ -29,13 +34,36 @@ const TopNavigation = () => {
   // 로그인 호출 함수
   const postLogin = async (data: any) => {
     try {
-      const res = await axios.post(
-        "http://localhost:8000/account/login/",
-        data,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await apis.usersApi.login(data);
+      console.log(res);
+      Router.push("/home");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  // 회원가입 폼 전송
+  const onSubmitRegister = (e: SyntheticEvent) => {
+    e.preventDefault();
+    const target = e.target as EventTarget & {
+      username: { value: string };
+      password: { value: string };
+      name: { value: string };
+      email: { value: string };
+    };
+    const form = {
+      username: target.username.value,
+      password: target.password.value,
+      name: target.name.value,
+      email: target.email.value,
+    };
+    console.log(form);
+    postRegister(form);
+    // dispatch(userActions.register(form)); TODO -> redux 상태관리
+  };
+  // 회원가입 호출 함수
+  const postRegister = async (data: any) => {
+    try {
+      const res = await apis.usersApi.register(data);
       console.log(res);
     } catch (e) {
       console.error(e);
@@ -51,30 +79,25 @@ const TopNavigation = () => {
           <Link href="/blog">Blog</Link>
         </Nav>
         <Nav>
-          <Button onClick={handleOpen} variant="outlined">
+          <Button onClick={handleOpenLogin} variant="outlined">
             Login
+          </Button>
+          <Button onClick={handleOpenSignUp} variant="outlined">
+            Sign up
           </Button>
         </Nav>
       </NavContainer>
-      <Modal
-        open={openLoginModal}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <ModalContent>
-          <LoginContainer>
-            <form onSubmit={onSubmit}>
-              <input type="text" id="username" />
-              <input type="password" id="password" />
-              <Button type="submit" variant="contained">
-                로그인
-              </Button>
-            </form>
-          </LoginContainer>
-        </ModalContent>
-      </Modal>
-      {/* <LoginModal openLoginModal={openLoginModal} toggleModal={onLoginModal} /> */}
+
+      <LoginModal
+        openModal={openLogin}
+        onClose={handleCloseLogin}
+        onSubmit={onSubmit}
+      />
+      <SignupModal
+        openModal={openSignUp}
+        onClose={handleCloseSignUp}
+        onSubmit={onSubmitRegister}
+      />
     </>
   );
 };

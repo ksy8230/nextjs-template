@@ -46,7 +46,7 @@ export default function Blog() {
     setEmail(e.target.value);
   const onSubmit = () => {
     const form = {
-      nickname: id,
+      username: id,
       password,
       name: "kim",
       email,
