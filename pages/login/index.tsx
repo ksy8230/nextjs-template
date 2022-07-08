@@ -49,10 +49,6 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {
-    getUser();
-  }, []);
-
   return (
     <div>
       <form onSubmit={onSubmit}>

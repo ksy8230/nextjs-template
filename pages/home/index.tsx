@@ -71,7 +71,7 @@ export default function Home() {
       </HomeHistory>
 
       <HomeProject>
-        <button>Project 👉</button>
+        <button type="button">Project 👉</button>
       </HomeProject>
 
       <HomeSkill>

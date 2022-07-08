@@ -67,17 +67,6 @@ export const HomeHistory = styled.section`
 export const HomeProject = styled.section`
   text-align: right;
   padding-bottom: 2rem;
-  button {
-    display: inline-block;
-    padding: 0.45rem 0.6rem;
-    background-color: #2a68dd;
-    color: #fff;
-    border-radius: 0.25rem;
-    font-size: 0.85rem;
-    line-height: 0.85rem;
-    border: 0;
-    cursor: pointer;
-  }
 `;
 
 export const HomeSkill = styled.section`

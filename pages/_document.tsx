@@ -10,10 +10,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          {/* <link
-            href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
-            rel="stylesheet"
-          /> */}
           <link
             href="https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css"
             rel="stylesheet"
