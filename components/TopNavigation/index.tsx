@@ -6,8 +6,15 @@ import SignupModal from "./components/SignupModal";
 import LoginModal from "./components/LoginModal";
 import apis from "../../api";
 import Router from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store";
+import * as userActions from "../../store/modules/users/index";
 
 const TopNavigation = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { me, error, isRegistered } = useSelector(
+    (state: RootState) => state.users
+  );
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignUp, setOpenSignUp] = useState(false);
 
@@ -27,20 +34,9 @@ const TopNavigation = () => {
       username: target.username.value,
       password: target.password.value,
     };
-    console.log(form);
-    postLogin(form);
-    // dispatch(userActions.login(form)); TODO -> redux 상태관리
+    dispatch(userActions.login(form));
   };
-  // 로그인 호출 함수
-  const postLogin = async (data: any) => {
-    try {
-      const res = await apis.usersApi.login(data);
-      console.log(res);
-      Router.push("/home");
-    } catch (e) {
-      console.error(e);
-    }
-  };
+
   // 회원가입 폼 전송
   const onSubmitRegister = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -56,18 +52,7 @@ const TopNavigation = () => {
       name: target.name.value,
       email: target.email.value,
     };
-    console.log(form);
-    postRegister(form);
-    // dispatch(userActions.register(form)); TODO -> redux 상태관리
-  };
-  // 회원가입 호출 함수
-  const postRegister = async (data: any) => {
-    try {
-      const res = await apis.usersApi.register(data);
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    }
+    dispatch(userActions.register(form));
   };
 
   return (
@@ -79,12 +64,20 @@ const TopNavigation = () => {
           <Link href="/blog">Blog</Link>
         </Nav>
         <Nav>
-          <Button onClick={handleOpenLogin} variant="outlined">
-            Login
-          </Button>
-          <Button onClick={handleOpenSignUp} variant="outlined">
-            Sign up
-          </Button>
+          {me?.id ? (
+            <>
+              <Button variant="outlined">Logout</Button>
+            </>
+          ) : (
+            <>
+              <Button onClick={handleOpenLogin} variant="outlined">
+                Login
+              </Button>
+              <Button onClick={handleOpenSignUp} variant="outlined">
+                Sign up
+              </Button>
+            </>
+          )}
         </Nav>
       </NavContainer>
 
@@ -92,11 +85,14 @@ const TopNavigation = () => {
         openModal={openLogin}
         onClose={handleCloseLogin}
         onSubmit={onSubmit}
+        error={error}
       />
       <SignupModal
         openModal={openSignUp}
         onClose={handleCloseSignUp}
         onSubmit={onSubmitRegister}
+        isRegistered={isRegistered}
+        error={error}
       />
     </>
   );

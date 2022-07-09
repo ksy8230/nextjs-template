@@ -1,11 +1,17 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { ModalContent, SignUpContainer } from "../../style";
+import { ModalContent, SignUpContainer, SignUpSuccess } from "../../style";
 import TextField from "@mui/material/TextField";
-import { ISubmitFormModal } from "../types";
+import { IRegisterModal } from "../types";
 
-const SignupModal = ({ openModal, onClose, onSubmit }: ISubmitFormModal) => {
+const SignupModal = ({
+  openModal,
+  onClose,
+  onSubmit,
+  error,
+  isRegistered,
+}: IRegisterModal) => {
   return (
     <Modal
       open={openModal}
@@ -15,40 +21,49 @@ const SignupModal = ({ openModal, onClose, onSubmit }: ISubmitFormModal) => {
     >
       <ModalContent>
         <SignUpContainer>
-          <form onSubmit={onSubmit}>
-            <TextField
-              id="username"
-              label="username"
-              variant="outlined"
-              fullWidth
-              className="custom-text-field"
-            />
-            <TextField
-              id="password"
-              label="password"
-              variant="outlined"
-              type="password"
-              fullWidth
-              className="custom-text-field"
-            />
-            <TextField
-              id="name"
-              label="name"
-              variant="outlined"
-              fullWidth
-              className="custom-text-field"
-            />
-            <TextField
-              id="email"
-              label="email"
-              variant="outlined"
-              fullWidth
-              className="custom-text-field"
-            />
-            <Button type="submit" variant="contained" fullWidth>
-              Sign Up
-            </Button>
-          </form>
+          {isRegistered ? (
+            <SignUpSuccess>
+              <p>회원가입에 성공했습니다!</p>
+              <p>로그인 해주세요 😆</p>
+            </SignUpSuccess>
+          ) : (
+            <form onSubmit={onSubmit}>
+              <TextField
+                id="username"
+                label="username"
+                variant="outlined"
+                fullWidth
+                className="custom-text-field"
+              />
+              <TextField
+                id="password"
+                label="password"
+                variant="outlined"
+                type="password"
+                fullWidth
+                className="custom-text-field"
+              />
+              <TextField
+                id="name"
+                label="name"
+                variant="outlined"
+                fullWidth
+                className="custom-text-field"
+              />
+              <TextField
+                id="email"
+                label="email"
+                variant="outlined"
+                fullWidth
+                className="custom-text-field"
+              />
+              <Button type="submit" variant="contained" fullWidth>
+                Sign Up
+              </Button>
+            </form>
+          )}
+
+          {error && <p>{error}</p>}
         </SignUpContainer>
       </ModalContent>
     </Modal>

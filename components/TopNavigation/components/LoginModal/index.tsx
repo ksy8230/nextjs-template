@@ -5,7 +5,12 @@ import { ModalContent, SignUpContainer } from "../../style";
 import TextField from "@mui/material/TextField";
 import { ISubmitFormModal } from "../types";
 
-const LoginModal = ({ openModal, onClose, onSubmit }: ISubmitFormModal) => {
+const LoginModal = ({
+  openModal,
+  onClose,
+  onSubmit,
+  error,
+}: ISubmitFormModal) => {
   return (
     <Modal
       open={openModal}
@@ -35,6 +40,7 @@ const LoginModal = ({ openModal, onClose, onSubmit }: ISubmitFormModal) => {
               Login
             </Button>
           </form>
+          {error && <p>{error}</p>}
         </SignUpContainer>
       </ModalContent>
     </Modal>

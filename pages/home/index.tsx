@@ -29,19 +29,9 @@ export default function Home() {
   //   dispatch(counterActions.increment());
   // }, [dispatch]);
 
-  useEffect(() => {
-    // dispatch(counterActions.getAsync());
-  }, []);
-
-  // 유저 호출 함수
-  const getWhoIam = async () => {
-    try {
-      const res = await apis.usersApi.whoIam();
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // useEffect(() => {
+  //   dispatch(counterActions.getAsync());
+  // }, []);
 
   useEffect(() => {
     dispatch(userActions.whoIam());

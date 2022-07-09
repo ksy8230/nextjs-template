@@ -7,4 +7,9 @@ export interface TModal {
 
 export interface ISubmitFormModal extends TModal {
   onSubmit: (e: SyntheticEvent) => void;
+  error: string;
+}
+
+export interface IRegisterModal extends ISubmitFormModal {
+  isRegistered: boolean;
 }

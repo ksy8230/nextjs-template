@@ -14,5 +14,6 @@ export interface UserState {
   user: TUser | null;
   me: any;
   isLoading: boolean;
+  isRegistered: boolean;
   error: string;
 }
