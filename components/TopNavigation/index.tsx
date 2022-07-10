@@ -1,11 +1,9 @@
 import Link from "next/link";
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { Nav, NavContainer } from "./style";
 import Button from "@mui/material/Button";
 import SignupModal from "./components/SignupModal";
 import LoginModal from "./components/LoginModal";
-import apis from "../../api";
-import Router from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import * as userActions from "../../store/modules/users/index";
@@ -55,6 +53,11 @@ const TopNavigation = () => {
     dispatch(userActions.register(form));
   };
 
+  // 로그아웃
+  const onLogout = () => {
+    dispatch(userActions.logout());
+  };
+
   return (
     <>
       <NavContainer>
@@ -66,7 +69,9 @@ const TopNavigation = () => {
         <Nav>
           {me?.id ? (
             <>
-              <Button variant="outlined">Logout</Button>
+              <Button variant="outlined" onClick={onLogout}>
+                Logout
+              </Button>
             </>
           ) : (
             <>

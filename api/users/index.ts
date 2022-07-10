@@ -84,4 +84,8 @@ export const api = {
   whoIam() {
     return socialApiClient.get("/account/whoIam/");
   },
+
+  logout() {
+    return socialApiClient.post("/account/logout/", {});
+  },
 };

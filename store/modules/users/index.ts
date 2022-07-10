@@ -22,6 +22,11 @@ export const login = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk("user/logout", async () => {
+  const result = await apis.usersApi.logout();
+  Router.reload();
+});
+
 export const register = createAsyncThunk(
   "user/register",
   async (data: TRegisterData) => {
