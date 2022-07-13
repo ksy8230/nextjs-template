@@ -7,12 +7,18 @@ import LoginModal from "./components/LoginModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import * as userActions from "../../store/modules/users/index";
+import { IUser } from "../../store/modules/users/type";
+
+interface IState extends RootState {
+  hydrate: IUser;
+}
 
 const TopNavigation = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { me, error, isRegistered } = useSelector(
     (state: RootState) => state.users
   );
+  const hydrate = useSelector((state: IState) => state.hydrate);
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignUp, setOpenSignUp] = useState(false);
 
@@ -67,7 +73,7 @@ const TopNavigation = () => {
           <Link href="/blog">Blog</Link>
         </Nav>
         <Nav>
-          {me?.id ? (
+          {hydrate?.username ? (
             <>
               <Button variant="outlined" onClick={onLogout}>
                 Logout

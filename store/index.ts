@@ -3,7 +3,7 @@ import { createWrapper, MakeStore } from "next-redux-wrapper";
 // import logger from "redux-logger";
 import reducer from "./modules";
 
-const store = configureStore({
+export const store = configureStore({
   reducer: reducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   devTools: process.env.NODE_ENV !== "production",

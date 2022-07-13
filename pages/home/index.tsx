@@ -1,9 +1,6 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ReactElement, useCallback, useEffect } from "react";
+import { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout";
-import * as userActions from "../../store/modules/users/index";
-import apis from "../../api";
 import { AppDispatch } from "../../store";
 import {
   HomeH3,
@@ -12,9 +9,6 @@ import {
   HomeProject,
   HomeSkill,
 } from "./style";
-import { GetServerSideProps } from "next";
-import axios from "axios";
-import Cookies from "js-cookie";
 
 // const getAsync = createAsyncThunk(`counter/getAsync`, async () => {
 //   //   const result = await apis.counterApi.getCount();
@@ -24,42 +18,7 @@ import Cookies from "js-cookie";
 //   };
 // });
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  try {
-    console.log(context.req.headers.cookie);
-    const allCookies = context.req.headers.cookie;
-    const parts = allCookies?.split(`; `);
-    console.log("parts", parts);
-    let csrftoken = "" as string | undefined;
-    if (parts?.length === 2) {
-      csrftoken = parts?.[0]?.split("csrftoken=")?.[1];
-    }
-    console.log("csrftoken", csrftoken);
-    if (csrftoken) {
-      const res = await axios.get("http://localhost:8000/account/whoIam/");
-      axios.defaults.withCredentials = true;
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = csrftoken;
-      console.log("res =============", res.data);
-      return {
-        props: { data: res.data },
-      };
-    } else {
-      return {
-        props: {},
-      };
-    }
-  } catch (e) {
-    console.error(e);
-    return {
-      redirect: {
-        destination: "/home",
-        statusCode: 307,
-      },
-    };
-  }
-};
-
-export default function Home({ data }: any) {
+export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
   const counter = useSelector(({ counter }: any) => counter);
 
@@ -71,16 +30,15 @@ export default function Home({ data }: any) {
   //   dispatch(counterActions.getAsync());
   // }, []);
 
-  useEffect(() => {
-    dispatch(userActions.whoIam());
-    console.log(data);
-  }, []);
+  // useEffect(() => {
+  //   dispatch(userActions.whoIam());
+  // }, []);
 
   return (
     <div>
       <HomeInformation>
         <p>@ksy8230</p>
-        <h2>김수영 {data?.username}</h2>
+        <h2>김수영</h2>
         <p>참크래커 개발자 🥮</p>
       </HomeInformation>
       <HomeHistory>

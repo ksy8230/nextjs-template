@@ -18,7 +18,7 @@ const SOCIAL_SERVER_URL = `${
   process.env.NEXT_PUBLIC_PORT || windowPort
 }${process.env.NEXT_PUBLIC_PREFIX}`;
 
-console.log("SOCIAL_SERVER_URL =", SOCIAL_SERVER_URL);
+// console.log("SOCIAL_SERVER_URL =", SOCIAL_SERVER_URL);
 
 function apiRequestProtocol() {
   if (process.env.NEXT_PUBLIC_TOKEN_AUTH === "1") {
@@ -62,8 +62,6 @@ socialApiClient?.interceptors.request.use(async function (
       if (config.url!.startsWith("/v1/files/")) {
         config.responseType = "blob";
       }
-      console.log(config);
-      // console.log(resultToken);
       return config;
     }
     // 쿠키 인증 방식
@@ -71,8 +69,6 @@ socialApiClient?.interceptors.request.use(async function (
       console.log("COOKIE_AUTH");
       const { csrftoken } = await apis.usersApi.validCookie();
       config.headers!["X-CSRFToken"] = csrftoken ? csrftoken : "";
-
-      console.log(config);
       return config;
     }
   }

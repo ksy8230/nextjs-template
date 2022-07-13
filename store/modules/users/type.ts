@@ -17,3 +17,10 @@ export interface UserState {
   isRegistered: boolean;
   error: string;
 }
+
+export interface IUser {
+  id?: number;
+  username?: string;
+  name?: string;
+  email?: string;
+}

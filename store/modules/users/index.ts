@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apis from "../../../api";
 import { TLoginData, TRegisterData } from "../../../api/users/type";
-import { TUser, UserState } from "./type";
+import { UserState } from "./type";
 import Router from "next/router";
 
 // 초기 상태 정의
