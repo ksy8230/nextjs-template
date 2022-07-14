@@ -44,7 +44,7 @@ MyApp.getInitialProps = wrapper.getInitialPageProps(
       });
       store.dispatch({
         type: HYDRATE,
-        payload: { hydrate: res.data },
+        payload: { users: { me: res.data } },
       });
     } else {
       store.dispatch({
