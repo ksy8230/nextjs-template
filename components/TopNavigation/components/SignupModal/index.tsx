@@ -34,6 +34,7 @@ const SignupModal = ({
                 variant="outlined"
                 fullWidth
                 className="custom-text-field"
+                required
               />
               <TextField
                 id="password"
@@ -42,6 +43,7 @@ const SignupModal = ({
                 type="password"
                 fullWidth
                 className="custom-text-field"
+                required
               />
               <TextField
                 id="name"
@@ -49,6 +51,7 @@ const SignupModal = ({
                 variant="outlined"
                 fullWidth
                 className="custom-text-field"
+                required
               />
               <TextField
                 id="email"

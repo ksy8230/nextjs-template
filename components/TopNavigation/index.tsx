@@ -1,15 +1,16 @@
 import Link from "next/link";
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import { Nav, NavContainer } from "./style";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import SignupModal from "./components/SignupModal";
-import LoginModal from "./components/LoginModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import * as userActions from "../../store/modules/users/index";
 import { IUser } from "../../store/modules/users/type";
+import LoginModal from "./components/LoginModal";
+import SignupModal from "./components/SignupModal";
+import UserEditModal from "./components/UserEditModal";
 
 interface IState extends RootState {
   hydrate: IUser;
@@ -29,6 +30,8 @@ const TopNavigation = () => {
   const handleCloseLogin = () => setOpenLogin(false);
   const handleOpenSignUp = () => setOpenSignUp(true);
   const handleCloseSignUp = () => setOpenSignUp(false);
+  const handleOpenUserEdit = () => setOpenUserEdit(true);
+  const handleCloseUserEdit = () => setOpenUserEdit(false);
 
   // 로그인 폼 전송
   const onSubmit = (e: SyntheticEvent) => {
@@ -62,6 +65,23 @@ const TopNavigation = () => {
     dispatch(userActions.register(form));
   };
 
+  // 유저 수정 폼 전송
+  const onSubmitUserEdit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    const target = e.target as EventTarget & {
+      password: { value: string };
+      name: { value: string };
+      email: { value: string };
+    };
+    const form = {
+      password: target.password.value,
+      name: target.name.value,
+      email: target.email.value,
+    };
+    console.log(form);
+    dispatch(userActions.updateUser(form));
+  };
+
   // 로그아웃
   const onLogout = () => {
     dispatch(userActions.logout());
@@ -76,6 +96,10 @@ const TopNavigation = () => {
     setAnchorEl(null);
   };
 
+  useEffect(() => {
+    dispatch(userActions.whoIam());
+  }, []);
+
   return (
     <>
       <NavContainer>
@@ -85,7 +109,7 @@ const TopNavigation = () => {
           <Link href="/blog">Blog</Link>
         </Nav>
         <Nav>
-          {hydrate?.username ? (
+          {hydrate?.username || me?.username ? (
             <>
               <Button
                 id="basic-button"
@@ -109,7 +133,7 @@ const TopNavigation = () => {
                 }}
               >
                 <MenuItem onClick={handleClose}>마이페이지</MenuItem>
-                <MenuItem onClick={handleClose}>내 정보 수정</MenuItem>
+                <MenuItem onClick={handleOpenUserEdit}>내 정보 수정</MenuItem>
               </Menu>
             </>
           ) : (
@@ -135,6 +159,13 @@ const TopNavigation = () => {
         openModal={openSignUp}
         onClose={handleCloseSignUp}
         onSubmit={onSubmitRegister}
+        isRegistered={isRegistered}
+        error={error}
+      />
+      <UserEditModal
+        openModal={openUserEdit}
+        onClose={handleCloseUserEdit}
+        onSubmit={onSubmitUserEdit}
         isRegistered={isRegistered}
         error={error}
       />

@@ -34,6 +34,7 @@ const UserEditModal = ({
                 variant="outlined"
                 fullWidth
                 className="custom-text-field"
+                disabled
               />
               <TextField
                 id="password"
@@ -58,7 +59,7 @@ const UserEditModal = ({
                 className="custom-text-field"
               />
               <Button type="submit" variant="contained" fullWidth>
-                Sign Up
+                Edit
               </Button>
             </form>
           )}

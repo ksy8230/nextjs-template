@@ -1,6 +1,6 @@
 import { socialApiClient } from "../client";
 import { storage } from "../constants";
-import { IJwtPayload, TLoginData } from "./type";
+import { TLoginData } from "./type";
 import jwt, { JwtPayload } from "jwt-decode";
 import { loginUtil } from "../../helper";
 import { AxiosResponse } from "axios";
@@ -87,5 +87,9 @@ export const api = {
 
   logout() {
     return socialApiClient.post("/account/logout/", {});
+  },
+
+  updateUser(data: any) {
+    return socialApiClient.patch("/account/updateUser/", data);
   },
 };

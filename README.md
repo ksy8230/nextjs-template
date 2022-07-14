@@ -39,3 +39,7 @@ Next.js를 만든 Vercel에서 제작 (같은 제작사(?)니 호환은 좋을 �
 ### 세션 인증 방식
 
 장고에서 기본적으로 제공해 주는 세션 로그인 방식을 채택
+
+### 참고하면 좋은 글
+
+https://helloinyong.tistory.com/315?category=1008748

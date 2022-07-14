@@ -49,7 +49,7 @@ export default function Login() {
     }
   };
   useEffect(() => {
-    // getUser();
+    getUser();
   }, []);
 
   return (
