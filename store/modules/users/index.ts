@@ -94,6 +94,7 @@ const userSlice = createSlice({
     },
     [whoIam.rejected.type]: (state, action) => {
       state.isLoading = false;
+      state.me = null;
       state.error = "내 정보를 불러올 수 없습니다.";
     },
     // updateUser
