@@ -37,11 +37,11 @@ export default function Home() {
   return (
     <div>
       <HomeInformation>
-        <p>@ksy8230</p>
-        <h2>김수영</h2>
-        <p>참크래커 개발자 🥮</p>
+        <p>@mollang</p>
+        <h2>몰랑</h2>
+        <p>입맛이 까다로운 🐰</p>
       </HomeInformation>
-      <HomeHistory>
+      {/* <HomeHistory>
         <HomeH3>🧾 History</HomeH3>
         <div className="box">
           <div className="title">
@@ -103,7 +103,7 @@ export default function Home() {
             <a href="">Figma</a>
           </li>
         </ul>
-      </HomeSkill>
+      </HomeSkill> */}
     </div>
   );
 }

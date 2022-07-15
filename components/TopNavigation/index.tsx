@@ -105,8 +105,8 @@ const TopNavigation = () => {
       <NavContainer>
         <Nav>
           <Link href="/home">Home</Link>
-          <Link href="/project">Project</Link>
-          <Link href="/blog">Blog</Link>
+          <Link href="/project">업체 등록</Link>
+          <Link href="/blog">업체 리뷰</Link>
         </Nav>
         <Nav>
           {hydrate?.username || me?.username ? (
