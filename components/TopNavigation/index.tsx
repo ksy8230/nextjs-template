@@ -166,8 +166,9 @@ const TopNavigation = () => {
         openModal={openUserEdit}
         onClose={handleCloseUserEdit}
         onSubmit={onSubmitUserEdit}
-        isRegistered={isRegistered}
+        isEdited={isRegistered}
         error={error}
+        user={me}
       />
     </>
   );

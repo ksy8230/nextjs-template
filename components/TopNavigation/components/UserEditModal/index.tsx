@@ -3,15 +3,16 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { ModalContent, SignUpContainer, SignUpSuccess } from "../../style";
 import TextField from "@mui/material/TextField";
-import { IRegisterModal } from "../types";
+import { IUserEditModal } from "../types";
 
 const UserEditModal = ({
   openModal,
   onClose,
   onSubmit,
   error,
-  isRegistered,
-}: IRegisterModal) => {
+  isEdited,
+  user,
+}: IUserEditModal) => {
   return (
     <Modal
       open={openModal}
@@ -21,10 +22,9 @@ const UserEditModal = ({
     >
       <ModalContent>
         <SignUpContainer>
-          {isRegistered ? (
+          {isEdited ? (
             <SignUpSuccess>
-              <p>회원가입에 성공했습니다!</p>
-              <p>로그인 해주세요 😆</p>
+              <p>수정에 성공했습니다! 😆</p>
             </SignUpSuccess>
           ) : (
             <form onSubmit={onSubmit}>
@@ -35,6 +35,8 @@ const UserEditModal = ({
                 fullWidth
                 className="custom-text-field"
                 disabled
+                defaultValue={user?.username}
+                helperText="username은 수정할 수 없습니다"
               />
               <TextField
                 id="password"

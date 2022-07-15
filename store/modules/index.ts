@@ -3,6 +3,7 @@ import { HYDRATE } from "next-redux-wrapper";
 import counter from "./counter";
 import users from "./users/index";
 
+// 미사용 확인 필요
 export interface IUser {
   isLoggedIn: boolean;
   user: any;
