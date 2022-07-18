@@ -34,7 +34,7 @@ const rows = [
 export default function Company() {
   const dispatch = useDispatch<AppDispatch>();
   const company = useSelector(({ counter }: any) => counter);
-  const [categories, setCategories] = useState<string[]>([]); // 카테고리 선택값
+  const [categories, setCategories] = useState<any[]>([]); // 카테고리 선택값
   const [region, setRegion] = useState(1); // 지역 선택값
 
   const [openAdd, setOpenAdd] = useState(false);
@@ -46,9 +46,13 @@ export default function Company() {
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as EventTarget & TCompony;
+    let result = (categories as string[]).map((v: string) => {
+      return { code: v };
+    });
+    console.log(result);
     const form = {
       name: target.companyName.value,
-      categories: categories,
+      categories: result,
       region: region,
       phone: target.phone?.value,
       siteUrl: target.siteUrl?.value,
@@ -63,6 +67,12 @@ export default function Company() {
   const handleCategoriesChange = (
     event: SelectChangeEvent<typeof categories>
   ) => {
+    // let result = (event.target.value as string[]).map((v: string) => {
+    //   return { code: v };
+    // });
+    // console.log(event.target.value);
+    // console.log(event.target.value!.split(","));
+    // setCategories(result);
     setCategories(
       typeof event.target.value === "string"
         ? event.target.value.split(",")

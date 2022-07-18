@@ -58,7 +58,7 @@ MyApp.getInitialProps = wrapper.getInitialPageProps(
       pageProps = await Component.getInitialProps(ctx);
     }
     // return한 값은 해당 페이지 컴포넌트의 props로 들어가게 됨.
-    return { pageProps };
+    // return { pageProps };
   }
 );
 
