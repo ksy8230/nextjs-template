@@ -3,8 +3,6 @@ import apis from "../../../api";
 import { TLoginData, TRegisterData } from "../../../api/users/type";
 import { UserState } from "./type";
 import Router from "next/router";
-// import { HYDRATE } from "next-redux-wrapper";
-// import { REHYDRATE } from "redux-persist";
 
 // 초기 상태 정의
 const initialState: UserState = {
