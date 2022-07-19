@@ -1,13 +1,27 @@
+export type TCategory = {
+  code: number;
+};
+
 export type TCompony = {
-  companyName: { value: string };
-  companyCategories: { value: string[] };
+  id?: number;
+  name: string;
+  categories: TCategory[];
+  region: number;
+  phone?: string;
+  siteUrl?: string;
+  username?: string;
+};
+
+export type TRegisterCompony = {
+  name: { value: string };
+  categories: { value: string[] };
   region: { value: number };
   phone?: { value: string };
   siteUrl?: { value: string };
 };
 
 export interface ICompanyState {
-  companyList: TCompony[] | null;
+  companyList: TCompony[];
   isLoading: boolean;
   error: string;
 }

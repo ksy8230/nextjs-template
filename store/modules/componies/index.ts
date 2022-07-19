@@ -1,12 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apis from "../../../api";
-import { TLoginData } from "../../../api/users/type";
-import { ICompanyState, TCompony } from "./type";
+import { ICompanyState } from "./type";
 import Router from "next/router";
 
 // 초기 상태 정의
 const initialState: ICompanyState = {
-  companyList: null,
+  companyList: [],
   isLoading: false,
   error: "",
 };
@@ -16,14 +15,22 @@ export const registerCompany = createAsyncThunk(
   async (data: any) => {
     const result = await apis.companiesApi.register(data);
     console.log(result);
-    if (result?.data?.data) Router.reload();
+    if (result?.data) Router.reload();
+  }
+);
+
+export const updateCompany = createAsyncThunk(
+  "company/update",
+  async (data: any) => {
+    const result = await apis.companiesApi.update(data);
+    console.log(result);
+    // if (result?.data) Router.reload();
   }
 );
 
 export const getCompanies = createAsyncThunk("company/list", async () => {
   const result = await apis.companiesApi.list();
-  console.log(result);
-  // if (result?.data?.data) Router.reload();
+  return result.data;
 });
 
 const companySlice = createSlice({
@@ -42,7 +49,21 @@ const companySlice = createSlice({
     },
     [registerCompany.rejected.type]: (state, action) => {
       state.isLoading = false;
-      state.error = "로그인에 실패했습니다.";
+      state.error = "업체 추가에 실패했습니다.";
+    },
+    // list
+    [getCompanies.pending.type]: (state, action) => {
+      state.isLoading = true;
+      state.error = "";
+    },
+    [getCompanies.fulfilled.type]: (state, action) => {
+      state.isLoading = false;
+      state.companyList = action.payload;
+      state.error = "";
+    },
+    [getCompanies.rejected.type]: (state, action) => {
+      state.isLoading = false;
+      state.error = "리스트 조회에 실패했습니다.";
     },
   },
 });

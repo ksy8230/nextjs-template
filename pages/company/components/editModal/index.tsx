@@ -8,9 +8,9 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { Categories, Regions } from "../../constants";
-import { IAddCompanyModal } from "../types";
+import { IEditCompanyModal } from "../types";
 
-const AddModal = ({
+const EditModal = ({
   openModal,
   onClose,
   onSubmit,
@@ -18,7 +18,8 @@ const AddModal = ({
   value,
   handleRegionChange,
   handleCategoriesChange,
-}: IAddCompanyModal) => {
+  company,
+}: IEditCompanyModal) => {
   return (
     <Modal
       open={openModal}
@@ -35,6 +36,7 @@ const AddModal = ({
             fullWidth
             className="custom-text-field"
             required
+            defaultValue={company.name}
           />
           <FormControl required fullWidth>
             <InputLabel id="companyCategories">업체종류</InputLabel>
@@ -76,6 +78,7 @@ const AddModal = ({
             type="tel"
             fullWidth
             className="custom-text-field"
+            defaultValue={company.phone}
           />
           <TextField
             id="siteUrl"
@@ -83,9 +86,10 @@ const AddModal = ({
             variant="outlined"
             fullWidth
             className="custom-text-field"
+            defaultValue={company.siteUrl}
           />
           <Button type="submit" variant="contained" fullWidth>
-            Add
+            Edit
           </Button>
         </form>
         {error && <p>{error}</p>}
@@ -94,4 +98,4 @@ const AddModal = ({
   );
 };
 
-export default AddModal;
+export default EditModal;

@@ -5,6 +5,9 @@ export const api = {
   register(data: TCompony) {
     return socialApiClient.post("/company/register/", data);
   },
+  update(data: any) {
+    return socialApiClient.put("/company/update/", data);
+  },
   list() {
     return socialApiClient.get("/company/list/");
   },
