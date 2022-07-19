@@ -90,7 +90,8 @@ export default function Company() {
       username: me?.username,
     };
     console.log(form);
-    dispatch(companyActions.updateCompany(form));
+    console.log(currentCompany);
+    dispatch(companyActions.updateCompany({ data: form, id: 1 }));
   };
 
   const handleRegionChange = (event: SelectChangeEvent<number>) => {

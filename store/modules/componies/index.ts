@@ -22,7 +22,8 @@ export const registerCompany = createAsyncThunk(
 export const updateCompany = createAsyncThunk(
   "company/update",
   async (data: any) => {
-    const result = await apis.companiesApi.update(data);
+    console.log(data);
+    const result = await apis.companiesApi.update(data.data, data.id);
     console.log(result);
     // if (result?.data) Router.reload();
   }
