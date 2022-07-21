@@ -5,10 +5,18 @@ export const api = {
   register(data: TCompony) {
     return socialApiClient.post("/company/register/", data);
   },
-  update(data: any, id: any) {
+  update(data: any, id: number) {
     return socialApiClient.put(`/company/update/${id}`, data);
   },
-  list() {
-    return socialApiClient.get("/company/list/");
+  delete(id: number) {
+    return socialApiClient.delete(`/company/delete/${id}`);
+  },
+  list(data: any) {
+    console.log(data);
+    let uri = "/company/list";
+    if (data.searchType) {
+      uri = `/company/list?searchType=${data.searchType}&searchValue=${data.searchValue}`;
+    }
+    return socialApiClient.get(uri);
   },
 };

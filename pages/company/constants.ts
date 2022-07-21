@@ -25,3 +25,10 @@ export const Categories = [
   { code: 2, name: "먹이" },
   { code: 3, name: "용품" },
 ];
+
+export const FilterMainList = [
+  { code: "name", name: "업체명" },
+  { code: "categories", name: "업체종류" },
+  { code: "region", name: "지역" },
+  { code: "username", name: "등록자" },
+];

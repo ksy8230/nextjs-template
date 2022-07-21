@@ -34,11 +34,11 @@ const EditModal = ({
             label="업체명"
             variant="outlined"
             fullWidth
-            className="custom-text-field"
+            className="custom-field"
             required
             defaultValue={company.name}
           />
-          <FormControl required fullWidth>
+          <FormControl required fullWidth className="custom-field">
             <InputLabel id="companyCategories">업체종류</InputLabel>
             <Select
               labelId="companyCategories"
@@ -55,7 +55,7 @@ const EditModal = ({
               ))}
             </Select>
           </FormControl>
-          <FormControl required fullWidth>
+          <FormControl required fullWidth className="custom-field">
             <InputLabel id="region">지역</InputLabel>
             <Select
               labelId="region"
@@ -77,7 +77,7 @@ const EditModal = ({
             variant="outlined"
             type="tel"
             fullWidth
-            className="custom-text-field"
+            className="custom-field"
             defaultValue={company.phone}
           />
           <TextField
@@ -85,7 +85,7 @@ const EditModal = ({
             label="업체 링크(사이트 혹은 지도)"
             variant="outlined"
             fullWidth
-            className="custom-text-field"
+            className="custom-field"
             defaultValue={company.siteUrl}
           />
           <Button type="submit" variant="contained" fullWidth>

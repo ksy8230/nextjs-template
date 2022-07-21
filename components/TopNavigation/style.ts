@@ -24,10 +24,13 @@ export const ModalContent = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: 25rem;
-  max-height: 25rem;
+
   background-color: #fff;
   border-radius: 0.938rem;
   padding: 1rem;
+  .custom-field {
+    margin-bottom: 1rem;
+  }
 `;
 
 export const LoginContainer = styled.div`

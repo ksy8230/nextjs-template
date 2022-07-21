@@ -1,5 +1,5 @@
 export type TCategory = {
-  code: number;
+  code: string;
 };
 
 export type TCompony = {
