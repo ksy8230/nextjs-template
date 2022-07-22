@@ -40,6 +40,7 @@ const FilterContainer = ({
           <Select
             labelId="categories"
             id="categories"
+            multiple
             label="categories"
             value={value.searchValue}
             onChange={handleFilterCategoriesValueChange}

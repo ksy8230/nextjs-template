@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Tag = styled.span<{ code: string }>`
+export const Tag = styled.span<{ code: string | number }>`
   display: inline-block;
   border-radius: 5px;
   min-width: 50px;

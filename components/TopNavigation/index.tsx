@@ -106,7 +106,7 @@ const TopNavigation = () => {
         <Nav>
           <Link href="/home">Home</Link>
           <Link href="/company">업체 등록</Link>
-          <Link href="/blog">업체 리뷰</Link>
+          <Link href="/review">업체 리뷰</Link>
         </Nav>
         <Nav>
           {hydrate?.username || me?.username ? (

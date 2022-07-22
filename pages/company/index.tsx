@@ -13,7 +13,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import TableContainer from "@mui/material/TableContainer";
 import AddModal from "./components/addModal";
-import { SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
 import {
   TCategory,
   TRegisterCompony,
@@ -33,10 +33,10 @@ export default function Company() {
   const { me } = useSelector((state: RootState) => state.users);
   const { companyList } = useSelector((state: RootState) => state.companies);
   const [currentCompany, setCurrentCompany] = useState<any>({});
-  const [categories, setCategories] = useState<string[]>([]); // 업체종류 선택값
-  const [region, setRegion] = useState(""); // 지역 선택값
+  const [categories, setCategories] = useState<any[]>([]); // 업체종류 선택값
+  const [region, setRegion] = useState<string | number>(""); // 지역 선택값
   const [filter, setFilter] = useState<string>(""); // 필터 선택값
-  const [searchValue, setSearchValue] = useState(""); // 검색어 값
+  const [searchValue, setSearchValue] = useState<string | any[]>([]); // 검색어 값
 
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -109,14 +109,12 @@ export default function Company() {
     dispatch(companyActions.deleteCompany(currentCompany.id));
   };
 
-  const handleRegionChange = (event: SelectChangeEvent<number>) => {
-    setRegion(event.target.value as number);
-  };
+  const handleRegionChange = (event: SelectChangeEvent<string | number>) =>
+    setRegion(event.target.value);
 
   const handleCategoriesChange = (
     event: SelectChangeEvent<typeof categories | typeof filter>
   ) => {
-    setFilter(event.target.value as string);
     setCategories(
       typeof event.target.value === "string"
         ? event.target.value.split(",")
@@ -128,8 +126,16 @@ export default function Company() {
     setFilter(event.target.value);
   // 필터 > 업체종류 검색
   const handleFilterCategoriesValueChange = (
-    event: SelectChangeEvent<string>
-  ) => setSearchValue(event.target.value);
+    event: SelectChangeEvent<typeof categories | typeof filter>
+  ) => {
+    console.log(event.target.value);
+    setSearchValue(
+      typeof event.target.value === "string"
+        ? event.target.value.split(",")
+        : event.target.value
+    );
+  };
+
   // 필터 > 지역 검색
   const handleFilterRegionValueChange = (event: SelectChangeEvent<string>) =>
     setSearchValue(event.target.value);
@@ -141,7 +147,7 @@ export default function Company() {
     dispatch(
       companyActions.getCompanies({
         searchType: filter,
-        searchValue,
+        searchValue: searchValue, // ex. [1,2,3]
       })
     );
   };
@@ -209,18 +215,22 @@ export default function Company() {
                 </TableCell>
                 <TableCell align="center">{row.username || ""}</TableCell>
                 <TableCell align="center">
-                  <Button
-                    variant="outlined"
-                    onClick={() => handleOpenEdit(row.id)}
-                  >
-                    수정
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    onClick={() => handleOpenDelete(row.id)}
-                  >
-                    삭제
-                  </Button>
+                  {me?.username == row.username && (
+                    <>
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleOpenEdit(row.id)}
+                      >
+                        수정
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleOpenDelete(row.id)}
+                      >
+                        삭제
+                      </Button>
+                    </>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

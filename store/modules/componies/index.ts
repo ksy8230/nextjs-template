@@ -37,7 +37,7 @@ export const deleteCompany = createAsyncThunk(
 
 export const getCompanies = createAsyncThunk(
   "company/list",
-  async (data: { searchType: string; searchValue: string }) => {
+  async (data: { searchType: string; searchValue: string | any[] }) => {
     const result = await apis.companiesApi.list(data);
     return result.data;
   }

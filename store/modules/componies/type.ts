@@ -1,12 +1,12 @@
 export type TCategory = {
-  code: string;
+  code: string | number;
 };
 
 export type TCompony = {
   id?: number;
   name: string;
   categories: TCategory[];
-  region: number;
+  region: string | number;
   phone?: string;
   siteUrl?: string;
   username?: string;
