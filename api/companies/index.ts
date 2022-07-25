@@ -19,4 +19,12 @@ export const api = {
     }
     return socialApiClient.get(uri);
   },
+  listAND(data: any) {
+    console.log(data);
+    let uri = "/company/listWrite";
+    if (data.searchCategory) {
+      uri = `/company/listWrite?searchCategory=${data.searchCategory}&searchRegion=${data.searchRegion}`;
+    }
+    return socialApiClient.get(uri);
+  },
 };

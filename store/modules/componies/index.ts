@@ -43,6 +43,17 @@ export const getCompanies = createAsyncThunk(
   }
 );
 
+export const getCompaniesAND = createAsyncThunk(
+  "company/list_AND_region",
+  async (data: {
+    searchCategory: string | any[];
+    searchRegion: string | number;
+  }) => {
+    const result = await apis.companiesApi.listAND(data);
+    return result.data;
+  }
+);
+
 const companySlice = createSlice({
   name: "company",
   initialState,
@@ -88,6 +99,7 @@ const companySlice = createSlice({
       state.isLoading = false;
       state.error = "리스트 조회에 실패했습니다.";
     },
+    // list_AND_region
   },
 });
 
