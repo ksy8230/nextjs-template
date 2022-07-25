@@ -2,7 +2,7 @@ import { MouseEvent, ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../../../components/DefaultLayout";
 import Button from "@mui/material/Button";
-import { AppDispatch } from "../../../store";
+import { AppDispatch, RootState } from "../../../store";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputLabel from "@mui/material/InputLabel";
@@ -16,7 +16,7 @@ import * as companyActions from "../../../store/modules/componies/index";
 
 export default function Review() {
   const dispatch = useDispatch<AppDispatch>();
-  const counter = useSelector(({ counter }: any) => counter);
+  const { companyList } = useSelector((state: RootState) => state.companies);
   const [categories, setCategories] = useState<string[]>([]); // 업체종류 선택값
   const [region, setRegion] = useState<string | number>(""); // 지역 선택값
   const [name, setName] = useState<string>(""); // 업체명
@@ -89,8 +89,8 @@ export default function Review() {
       <Autocomplete
         id="size-small-outlined"
         size="small"
-        options={["업체명1", "업체명2", "업체명3"]}
-        getOptionLabel={(option) => option}
+        options={companyList}
+        getOptionLabel={(option) => option.name}
         renderInput={(params) => (
           <TextField
             {...params}
