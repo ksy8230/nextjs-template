@@ -13,6 +13,9 @@ import { TableCustomContainer } from "../../../components/Table/style";
 import { Categories, Regions } from "../../company/constants";
 import { TableHeaderContainer } from "../../company/components/filter/style";
 import * as companyActions from "../../../store/modules/componies/index";
+import Editor from "react-medium-editor";
+import "medium-editor/dist/css/medium-editor.css";
+import "medium-editor/dist/css/themes/default.css";
 
 export default function Review() {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,6 +23,7 @@ export default function Review() {
   const [categories, setCategories] = useState<string[]>([]); // 업체종류 선택값
   const [region, setRegion] = useState<string | number>(""); // 지역 선택값
   const [name, setName] = useState<string>(""); // 업체명
+  const [text, setText] = useState();
 
   const handleCategoriesChange = (
     event: SelectChangeEvent<typeof categories | string>
@@ -40,6 +44,19 @@ export default function Review() {
         searchCategory: categories,
         searchRegion: region,
       })
+    );
+  };
+  // 편집기 변경
+  const handleChangeText = (text: any, medium: any) => {
+    console.log(medium);
+    setText(text);
+  };
+
+  const handleSubmit = () => {
+    console.log("글쓰기");
+    console.log(typeof text);
+    console.log(
+      "<h2><b>dfsdf</b></h2><h3>dsfsdf</h3><p>sdfsfsdf</p><p>sdfsdf</p><p>sdff sdf sdf sdfsdfsdf</p><p>sdf sd</p>"
     );
   };
 
@@ -101,7 +118,37 @@ export default function Review() {
         )}
       />
 
-      <Button variant="outlined" onClick={() => {}}>
+      <Editor
+        text={text}
+        onChange={handleChangeText}
+        options={{
+          toolbar: {
+            allowMultiParagraphSelection: true,
+            buttons: [
+              "bold",
+              "italic",
+              "underline",
+              "anchor",
+              "h2",
+              "h3",
+              "quote",
+            ],
+            diffLeft: 0,
+            diffTop: -10,
+            firstButtonClass: "medium-editor-button-first",
+            lastButtonClass: "medium-editor-button-last",
+            relativeContainer: null,
+            standardizeSelectionStart: false,
+            static: false,
+            /* options which only apply when static is true */
+            align: "center",
+            sticky: false,
+            updateOnEmptySelection: false,
+          },
+        }}
+      />
+
+      <Button variant="outlined" onClick={handleSubmit}>
         글쓰기
       </Button>
     </TableCustomContainer>
