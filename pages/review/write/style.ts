@@ -12,4 +12,8 @@ export const SearchTag = styled.span`
   cursor: pointer;
 `;
 
-export const SearchTagContainer = styled.div``;
+export const Row = styled.div`
+  margin-bottom: 0.5rem;
+`;
+
+export const TextFieldContainer = styled.div``;

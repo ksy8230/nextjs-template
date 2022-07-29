@@ -35,3 +35,17 @@ a {
   color: #8898aa;
   border-top: 1px solid #d8e0e7;
 }
+
+/* medium-editor css */
+.medium-editor-element {
+  margin: 0.5rem 0 0.5rem;
+  padding: 0.25rem;
+  outline: 0;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: 4px;
+  min-height: 100px !important;
+}
+
+.medium-editor-element:focus-visible {
+  outline: 0;
+}
