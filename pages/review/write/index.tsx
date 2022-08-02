@@ -72,6 +72,7 @@ export default function Review() {
 
     const form = {
       categories: result,
+      name: target.name.value,
       region: region,
       title: target.title.value,
       content: text,

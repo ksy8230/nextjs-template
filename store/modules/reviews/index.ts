@@ -4,8 +4,8 @@ import { ICompanyState, TCompony } from "./type";
 import Router from "next/router";
 
 // 초기 상태 정의
-const initialState: ICompanyState = {
-  companyList: [],
+const initialState: any = {
+  reviewList: [],
   isLoading: false,
   error: "",
 };
@@ -35,10 +35,10 @@ export const registerReview = createAsyncThunk(
 //   }
 // );
 
-export const getCompanies = createAsyncThunk(
-  "company/list",
+export const getReviews = createAsyncThunk(
+  "review/list",
   async (data: { searchType: string; searchValue: string | any[] }) => {
-    const result = await apis.companiesApi.list(data);
+    const result = await apis.reviewsApi.list(data);
     return result.data;
   }
 );
@@ -86,16 +86,16 @@ const reviewSlice = createSlice({
     //   state.error = "업체 삭제에 실패했습니다.";
     // },
     // list
-    [getCompanies.pending.type]: (state, action) => {
+    [getReviews.pending.type]: (state, action) => {
       state.isLoading = true;
       state.error = "";
     },
-    [getCompanies.fulfilled.type]: (state, action) => {
+    [getReviews.fulfilled.type]: (state, action) => {
       state.isLoading = false;
-      state.companyList = action.payload || [];
+      state.reviewList = action.payload || [];
       state.error = "";
     },
-    [getCompanies.rejected.type]: (state, action) => {
+    [getReviews.rejected.type]: (state, action) => {
       state.isLoading = false;
       state.error = "리스트 조회에 실패했습니다.";
     },

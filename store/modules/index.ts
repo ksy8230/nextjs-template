@@ -3,6 +3,7 @@ import { HYDRATE } from "next-redux-wrapper";
 import counter from "./counter";
 import users from "./users/index";
 import companies from "./componies/index";
+import reviews from "./reviews/index";
 import { ICompanyState } from "./componies/type";
 
 // 미사용 확인 필요
@@ -29,6 +30,7 @@ export interface State {
   users: any;
   companies: ICompanyState;
   posts: IPost;
+  reviews: any;
 }
 
 const rootReducer = (state: State | undefined, action: AnyAction) => {
@@ -42,6 +44,7 @@ const rootReducer = (state: State | undefined, action: AnyAction) => {
     counter,
     users,
     companies,
+    reviews,
     // 여기에 추가
   })(state, action);
 };
