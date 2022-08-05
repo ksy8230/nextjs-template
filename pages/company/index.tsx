@@ -80,7 +80,7 @@ export default function Company() {
       region: region,
       phone: target.phone?.value,
       siteUrl: target.siteUrl?.value,
-      username: me?.username,
+      // username: me?.username,
     };
     console.log(form);
     dispatch(companyActions.registerCompany(form));

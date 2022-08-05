@@ -6,6 +6,7 @@ import Router from "next/router";
 // 초기 상태 정의
 const initialState: any = {
   reviewList: [],
+  singleList: {},
   isLoading: false,
   error: "",
 };
@@ -39,6 +40,14 @@ export const getReviews = createAsyncThunk(
   "review/list",
   async (data: { searchType: string; searchValue: string | any[] }) => {
     const result = await apis.reviewsApi.list(data);
+    return result.data;
+  }
+);
+
+export const getSingleReview = createAsyncThunk(
+  "review/singleList",
+  async (id: any) => {
+    const result = await apis.reviewsApi.singleList(id);
     return result.data;
   }
 );
@@ -98,6 +107,20 @@ const reviewSlice = createSlice({
     [getReviews.rejected.type]: (state, action) => {
       state.isLoading = false;
       state.error = "리스트 조회에 실패했습니다.";
+    },
+    // singleList
+    [getSingleReview.pending.type]: (state, action) => {
+      state.isLoading = true;
+      state.error = "";
+    },
+    [getSingleReview.fulfilled.type]: (state, action) => {
+      state.isLoading = false;
+      state.singleList = action.payload || {};
+      state.error = "";
+    },
+    [getSingleReview.rejected.type]: (state, action) => {
+      state.isLoading = false;
+      state.error = "상세 리뷰 조회에 실패했습니다.";
     },
     // list_AND_region
     // [getCompaniesAND.pending.type]: (state, action) => {

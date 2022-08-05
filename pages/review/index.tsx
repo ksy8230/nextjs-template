@@ -27,6 +27,7 @@ export default function Review() {
       <ReviewContainer>
         {reviewList?.map((list: any, i: number) => (
           <ReviewBox key={i}>
+            <Link href={`/review/${list.id}`}>링크</Link>
             <div className="thumb">{list.id}</div>
             <div className="info">
               <p>{list.name}</p>

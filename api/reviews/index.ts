@@ -19,6 +19,10 @@ export const api = {
     }
     return socialApiClient.get(uri);
   },
+  singleList(id: string) {
+    console.log(id);
+    return socialApiClient.get(`/review/${id}`);
+  },
   // listAND(data: any) {
   //   console.log(data);
   //   let uri = "/company/listWrite";
