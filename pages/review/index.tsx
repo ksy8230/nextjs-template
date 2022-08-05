@@ -10,6 +10,9 @@ import { Row } from "./write/style";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { ReviewBox, ReviewContainer } from "./style";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import GrassIcon from "@mui/icons-material/Grass";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
 
 export default function Review() {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,7 +31,17 @@ export default function Review() {
         {reviewList?.map((list: any, i: number) => (
           <ReviewBox key={i}>
             <Link href={`/review/${list.id}`}>링크</Link>
-            <div className="thumb">{list.id}</div>
+            <div className="thumb">
+              <>
+                {list.categories?.[0]?.code === 1 ? (
+                  <LocalHospitalIcon />
+                ) : list.categories?.[0]?.code === 2 ? (
+                  <GrassIcon />
+                ) : list.categories?.[0]?.code === 3 ? (
+                  <SmartToyIcon />
+                ) : null}
+              </>
+            </div>
             <div className="info">
               <p>{list.name}</p>
               <p>{list.title}</p>

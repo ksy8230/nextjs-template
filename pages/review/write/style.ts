@@ -17,3 +17,31 @@ export const Row = styled.div`
 `;
 
 export const TextFieldContainer = styled.div``;
+
+// comment
+export const CommentContainer = styled.div`
+  textarea {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    border: 0;
+    border-radius: 15px;
+    &:focus-visible {
+      outline: none;
+    }
+  }
+  .comment-area {
+    display: flex;
+    align-items: center;
+    textarea {
+      flex: 1;
+      margin-left: 0.5rem;
+      background-color: #f7f7d1;
+      padding: 1rem;
+    }
+  }
+  .button-area {
+    margin: 0.5rem 0 0 0;
+    text-align: right;
+  }
+`;
