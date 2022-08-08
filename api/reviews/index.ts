@@ -31,4 +31,13 @@ export const api = {
   //   }
   //   return socialApiClient.get(uri);
   // },
+  registerComment(data: any) {
+    return socialApiClient.post(`/review/${data.id}/comments/`, data.data);
+  },
+  updateComment(data: any) {
+    return socialApiClient.put(
+      `/review/${data.id}/comments/${data.commentId}/`,
+      data.data
+    );
+  },
 };

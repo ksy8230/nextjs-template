@@ -52,6 +52,25 @@ export const getSingleReview = createAsyncThunk(
   }
 );
 
+export const registerComment = createAsyncThunk(
+  "review_comment/register",
+  async (data: { id: string | string[] | undefined; data: any }) => {
+    const result = await apis.reviewsApi.registerComment(data);
+    return result.data;
+  }
+);
+export const updateComment = createAsyncThunk(
+  "review_comment/update",
+  async (data: {
+    id: string | string[] | undefined;
+    commentId: string;
+    data: any;
+  }) => {
+    const result = await apis.reviewsApi.updateComment(data);
+    return result.data;
+  }
+);
+
 // export const getCompaniesAND = createAsyncThunk(
 //   "company/list_AND_region",
 //   async (data: {
@@ -111,6 +130,7 @@ const reviewSlice = createSlice({
     // singleList
     [getSingleReview.pending.type]: (state, action) => {
       state.isLoading = true;
+      state.singleList = {};
       state.error = "";
     },
     [getSingleReview.fulfilled.type]: (state, action) => {
@@ -136,6 +156,7 @@ const reviewSlice = createSlice({
     //   state.isLoading = false;
     //   state.error = "리스트 조회에 실패했습니다.";
     // },
+    // Comment
   },
 });
 

@@ -64,7 +64,10 @@ export default function DetailReview() {
         }}
         className="detail-textfield"
       />
-      <Comment />
+      <Comment
+        reviewId={router.query.id}
+        commentLists={singleList.comment_set}
+      />
     </div>
   );
 }

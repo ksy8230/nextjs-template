@@ -44,4 +44,44 @@ export const CommentContainer = styled.div`
     margin: 0.5rem 0 0 0;
     text-align: right;
   }
+
+  .comment-list-area {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 3rem 0;
+    font-size: 14px;
+    p {
+      margin: 0;
+    }
+    .comment-list-area__inn {
+    }
+    .writer_info {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 0 0.5rem 0;
+
+      .writer {
+        display: flex;
+        align-items: center;
+      }
+      .actions {
+        display: flex;
+        align-items: center;
+        button {
+          min-width: 30px;
+          font-size: 0.5rem;
+        }
+      }
+    }
+    .editComment-area {
+      background-color: #ddd;
+      padding: 1rem;
+      .button-area {
+        text-align: right;
+      }
+    }
+    li {
+      margin-bottom: 1rem;
+    }
+  }
 `;
