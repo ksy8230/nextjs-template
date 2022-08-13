@@ -13,6 +13,7 @@ import { ReviewBox, ReviewContainer } from "./style";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import GrassIcon from "@mui/icons-material/Grass";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
+import PersonIcon from "@mui/icons-material/Person";
 
 export default function Review() {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,24 +32,30 @@ export default function Review() {
         {reviewList?.map((list: any, i: number) => (
           <ReviewBox key={i}>
             <Link href={`/review/${list.id}`}>링크</Link>
-            <div className="thumb">
-              <>
-                {list.categories?.[0]?.code === 1 ? (
-                  <LocalHospitalIcon />
-                ) : list.categories?.[0]?.code === 2 ? (
-                  <GrassIcon />
-                ) : list.categories?.[0]?.code === 3 ? (
-                  <SmartToyIcon />
-                ) : null}
-              </>
-            </div>
-            <div className="info">
-              <p>{list.name}</p>
-              <p>{list.title}</p>
-              <div className="rate">
-                <Typography component="legend">업체 리뷰 점수</Typography>
-                <Rating name="simple-controlled" value={list.rate} />
+            <div className="content">
+              <div className="thumb">
+                <>
+                  {list.categories?.[0]?.code === 1 ? (
+                    <LocalHospitalIcon className="hospital" />
+                  ) : list.categories?.[0]?.code === 2 ? (
+                    <GrassIcon className="grass" />
+                  ) : list.categories?.[0]?.code === 3 ? (
+                    <SmartToyIcon />
+                  ) : null}
+                </>
               </div>
+              <div className="info">
+                <p className="name">{list.name}</p>
+                <p>{list.title}</p>
+                <div className="rate">
+                  {/* <Typography component="legend">업체 리뷰 점수</Typography> */}
+                  <Rating name="simple-controlled" value={list.rate} />
+                </div>
+              </div>
+            </div>
+            <div className="user">
+              <PersonIcon />
+              <p>{list.username}</p>
             </div>
           </ReviewBox>
         ))}

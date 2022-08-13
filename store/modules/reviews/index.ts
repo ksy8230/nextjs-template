@@ -61,12 +61,15 @@ export const registerComment = createAsyncThunk(
 );
 export const updateComment = createAsyncThunk(
   "review_comment/update",
-  async (data: {
-    id: string | string[] | undefined;
-    commentId: string;
-    data: any;
-  }) => {
+  async (data: { commentId: string; data: any }) => {
     const result = await apis.reviewsApi.updateComment(data);
+    return result.data;
+  }
+);
+export const deleteComment = createAsyncThunk(
+  "review_comment/delete",
+  async (data: { commentId: string }) => {
+    const result = await apis.reviewsApi.deleteComment(data);
     return result.data;
   }
 );

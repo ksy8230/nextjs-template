@@ -41,7 +41,6 @@ const Comment = ({ reviewId, commentLists }: TCommnet) => {
   const onSubmitEdit = (commentId: string) => {
     dispatch(
       reviewActions.updateComment({
-        id: reviewId,
         commentId: commentId,
         data: { comment: editComment },
       })
@@ -50,6 +49,14 @@ const Comment = ({ reviewId, commentLists }: TCommnet) => {
   const editToggle = (commentId: string) => {
     setEditActive(!editActive);
     setCurrentCommentId(commentId);
+  };
+  // 댓글 삭제
+  const onDelete = (commentId: string) => {
+    dispatch(
+      reviewActions.deleteComment({
+        commentId: commentId,
+      })
+    );
   };
   return (
     <CommentContainer>
@@ -64,11 +71,11 @@ const Comment = ({ reviewId, commentLists }: TCommnet) => {
                   <p>{comment.username || "노네임"}</p>
                 </div>
                 <div className="actions">
-                  <p>{comment.created_at}</p>
+                  <p className="date">{comment.created_at}</p>
                   <Button size="small" onClick={() => editToggle(comment.id)}>
                     <EditIcon />
                   </Button>
-                  <Button size="small">
+                  <Button size="small" onClick={() => onDelete(comment.id)}>
                     <DeleteForeverIcon />
                   </Button>
                 </div>

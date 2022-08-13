@@ -52,6 +52,10 @@ export const CommentContainer = styled.div`
     font-size: 14px;
     p {
       margin: 0;
+      &.date {
+        font-size: 0.7rem;
+        margin-right: 1rem;
+      }
     }
     .comment-list-area__inn {
     }
@@ -74,7 +78,7 @@ export const CommentContainer = styled.div`
       }
     }
     .editComment-area {
-      background-color: #ddd;
+      background-color: #e3ecf5;
       padding: 1rem;
       .button-area {
         text-align: right;

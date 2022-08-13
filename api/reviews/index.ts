@@ -36,8 +36,11 @@ export const api = {
   },
   updateComment(data: any) {
     return socialApiClient.put(
-      `/review/${data.id}/comments/${data.commentId}/`,
+      `/review/comments/${data.commentId}/`,
       data.data
     );
+  },
+  deleteComment(data: any) {
+    return socialApiClient.delete(`/review/comments/delete/${data.commentId}/`);
   },
 };

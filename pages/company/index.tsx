@@ -215,7 +215,7 @@ export default function Company() {
                 </TableCell>
                 <TableCell align="center">{row.username || ""}</TableCell>
                 <TableCell align="center">
-                  {me?.username == row.username && (
+                  {me?.name == row.username && (
                     <>
                       <Button
                         variant="outlined"
