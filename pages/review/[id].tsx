@@ -8,7 +8,7 @@ import Editor from "react-medium-editor";
 import Rating from "@mui/material/Rating";
 import Button from "@mui/material/Button";
 import Link from "next/link";
-import Comment from "./write/comment";
+import Comment from "./comment";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import GrassIcon from "@mui/icons-material/Grass";
@@ -36,7 +36,9 @@ export default function DetailReview() {
             <KeyboardReturnIcon />
           </Link>
         </Button>
-        <Button variant="outlined">수정</Button>
+        <Button variant="outlined">
+          <Link href={`/review/edit/`}>수정</Link>
+        </Button>
       </ReviewHeader>
 
       <ReviewDetailInfo>
