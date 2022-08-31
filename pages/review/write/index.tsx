@@ -32,7 +32,7 @@ export default function Review() {
   const { me } = useSelector((state: RootState) => state.users);
   const { companyList } = useSelector((state: RootState) => state.companies);
   const [categories, setCategories] = useState<string[]>([]); // 업체종류 선택값
-  const [region, setRegion] = useState<string | number>(""); // 지역 선택값
+  const [region, setRegion] = useState<any>(""); // 지역 선택값
   const [text, setText] = useState();
   const [rate, setRate] = useState<number | null>(2);
 
@@ -45,7 +45,7 @@ export default function Review() {
         : event.target.value
     );
   };
-  const handleRegionChange = (event: SelectChangeEvent<string | number>) =>
+  const handleRegionChange = (event: SelectChangeEvent<any>) =>
     setRegion(event.target.value);
   // 검색
   const handleSearch = () => {
@@ -132,7 +132,7 @@ export default function Review() {
             id="name"
             size="small"
             options={companyList}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option: any) => option.name}
             renderInput={(params) => (
               <TextField
                 {...params}

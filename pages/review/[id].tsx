@@ -37,7 +37,7 @@ export default function DetailReview() {
           </Link>
         </Button>
         <Button variant="outlined">
-          <Link href={`/review/edit/`}>수정</Link>
+          <Link href={`/review/edit/${router.query.id}`}>수정</Link>
         </Button>
       </ReviewHeader>
 

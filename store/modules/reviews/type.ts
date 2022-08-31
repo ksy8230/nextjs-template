@@ -1,12 +1,14 @@
 export type TCategory = {
-  code: string | number;
+  // code: string | number;
+  code: any;
 };
 
 export type TCompony = {
   id?: number;
   name: string;
   categories: TCategory[];
-  region: string | number;
+  // region: string | number;
+  region: number | "" | undefined;
   phone?: string;
   siteUrl?: string;
   username?: string;

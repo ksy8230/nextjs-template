@@ -1,6 +1,6 @@
 import { socialApiClient } from "../client";
 import { storage } from "../constants";
-import { TLoginData } from "./type";
+import { IJwtPayload, TLoginData } from "./type";
 import jwt, { JwtPayload } from "jwt-decode";
 import { loginUtil } from "../../helper";
 import { AxiosResponse } from "axios";

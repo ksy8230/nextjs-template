@@ -47,7 +47,8 @@ export const getCompaniesAND = createAsyncThunk(
   "company/list_AND_region",
   async (data: {
     searchCategory: string | any[];
-    searchRegion: string | number;
+    // searchRegion: string | number;
+    searchRegion: any;
   }) => {
     const result = await apis.companiesApi.listAND(data);
     return result.data;

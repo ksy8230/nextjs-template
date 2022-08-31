@@ -34,7 +34,7 @@ export default function Company() {
   const { companyList } = useSelector((state: RootState) => state.companies);
   const [currentCompany, setCurrentCompany] = useState<any>({});
   const [categories, setCategories] = useState<any[]>([]); // 업체종류 선택값
-  const [region, setRegion] = useState<string | number>(""); // 지역 선택값
+  const [region, setRegion] = useState<any>(""); // 지역 선택값
   const [filter, setFilter] = useState<string>(""); // 필터 선택값
   const [searchValue, setSearchValue] = useState<string | any[]>([]); // 검색어 값
 
@@ -109,7 +109,7 @@ export default function Company() {
     dispatch(companyActions.deleteCompany(currentCompany.id));
   };
 
-  const handleRegionChange = (event: SelectChangeEvent<string | number>) =>
+  const handleRegionChange = (event: SelectChangeEvent<any>) =>
     setRegion(event.target.value);
 
   const handleCategoriesChange = (

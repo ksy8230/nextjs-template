@@ -39,7 +39,7 @@ export default function ReviewEdit({ post }: any) {
   const [categories, setCategories] = useState<string[]>(
     post.categories?.map((ctr: any) => ctr.code)
   ); // 업체종류 선택값
-  const [region, setRegion] = useState<string | number>(post.region); // 지역 선택값
+  const [region, setRegion] = useState<any>(post.region); // 지역 선택값
   const [text, setText] = useState(post.content);
   const [rate, setRate] = useState<number | null>(post.rate);
   const [titleValue, setTitleValue] = useState(post.title);
@@ -53,7 +53,7 @@ export default function ReviewEdit({ post }: any) {
         : event.target.value
     );
   };
-  const handleRegionChange = (event: SelectChangeEvent<string | number>) =>
+  const handleRegionChange = (event: SelectChangeEvent<any>) =>
     setRegion(event.target.value);
   // 검색
   const handleSearch = () => {
@@ -147,8 +147,8 @@ export default function ReviewEdit({ post }: any) {
             id="name"
             size="small"
             options={companyList}
-            getOptionLabel={(option) => option.name}
-            defaultValue={{ name: post.name }}
+            getOptionLabel={(option: any) => option.name}
+            // defaultValue={{ name: post.name }}
             renderInput={(params) => (
               <TextField
                 {...params}
