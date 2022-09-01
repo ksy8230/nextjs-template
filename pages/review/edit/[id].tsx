@@ -67,7 +67,6 @@ export default function ReviewEdit({ post }: any) {
   };
   // 편집기 변경
   const handleChangeText = (text: any, medium: any) => {
-    console.log(medium);
     setText(text);
   };
 
@@ -88,7 +87,7 @@ export default function ReviewEdit({ post }: any) {
       username: me?.username,
     };
     console.log(form);
-    // dispatch(reviewActions.registerReview(form));
+    dispatch(reviewActions.updateReview({ data: form, id: post.id }));
   };
 
   useEffect(() => {
@@ -148,7 +147,7 @@ export default function ReviewEdit({ post }: any) {
             size="small"
             options={companyList}
             getOptionLabel={(option: any) => option.name}
-            // defaultValue={{ name: post.name }}
+            defaultValue={{ name: post.name }}
             renderInput={(params) => (
               <TextField
                 {...params}

@@ -20,22 +20,13 @@ export const registerReview = createAsyncThunk(
   }
 );
 
-// export const updateCompany = createAsyncThunk(
-//   "company/update",
-//   async (data: { data: TCompony; id: number }) => {
-//     const result = await apis.companiesApi.update(data.data, data.id);
-//     if (result?.data) Router.reload();
-//   }
-// );
-
-// export const deleteCompany = createAsyncThunk(
-//   "company/delete",
-//   async (id: number) => {
-//     await apis.companiesApi.delete(id);
-//     Router.reload();
-//   }
-// );
-
+export const updateReview = createAsyncThunk(
+  "review/update",
+  async (data: { data: any; id: number }) => {
+    const result = await apis.reviewsApi.update(data.data, data.id);
+    if (result?.data) Router.reload();
+  }
+);
 export const getReviews = createAsyncThunk(
   "review/list",
   async (data: { searchType: string; searchValue: string | any[] }) => {

@@ -5,12 +5,12 @@ export const api = {
   register(data: any) {
     return socialApiClient.post("/review/register/", data);
   },
-  // update(data: any, id: number) {
-  //   return socialApiClient.put(`/company/update/${id}`, data);
-  // },
-  // delete(id: number) {
-  //   return socialApiClient.delete(`/company/delete/${id}`);
-  // },
+  update(data: any, id: number) {
+    return socialApiClient.put(`/review/update/${id}/`, data);
+  },
+  delete(id: number) {
+    return socialApiClient.delete(`/review/delete/${id}/`);
+  },
   list(data: any) {
     console.log(data);
     let uri = "/review/list";
