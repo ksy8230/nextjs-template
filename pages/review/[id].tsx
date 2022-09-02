@@ -28,6 +28,10 @@ export default function DetailReview() {
     }
   }, []);
 
+  const onDelete = () => {
+    dispatch(reviewActions.deleteReview({ id: singleList.id }));
+  };
+
   return (
     <div>
       <ReviewHeader className="editor-header">
@@ -38,6 +42,9 @@ export default function DetailReview() {
         </Button>
         <Button variant="outlined">
           <Link href={`/review/edit/${router.query.id}`}>수정</Link>
+        </Button>
+        <Button variant="outlined" onClick={onDelete}>
+          삭제
         </Button>
       </ReviewHeader>
 

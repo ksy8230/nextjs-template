@@ -19,7 +19,6 @@ export const registerReview = createAsyncThunk(
     // if (result?.data) Router.reload();
   }
 );
-
 export const updateReview = createAsyncThunk(
   "review/update",
   async (data: { data: any; id: number }) => {
@@ -27,6 +26,14 @@ export const updateReview = createAsyncThunk(
     if (result?.data) Router.reload();
   }
 );
+export const deleteReview = createAsyncThunk(
+  "review/delete",
+  async (data: { id: string }) => {
+    await apis.reviewsApi.delete(data.id);
+    Router.push("/review");
+  }
+);
+
 export const getReviews = createAsyncThunk(
   "review/list",
   async (data: { searchType: string; searchValue: string | any[] }) => {

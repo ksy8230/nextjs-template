@@ -8,7 +8,7 @@ export const api = {
   update(data: any, id: number) {
     return socialApiClient.put(`/review/update/${id}/`, data);
   },
-  delete(id: number) {
+  delete(id: string) {
     return socialApiClient.delete(`/review/delete/${id}/`);
   },
   list(data: any) {
