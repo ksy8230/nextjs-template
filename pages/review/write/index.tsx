@@ -1,10 +1,4 @@
-import {
-  MouseEvent,
-  ReactElement,
-  SyntheticEvent,
-  useEffect,
-  useState,
-} from "react";
+import { ReactElement, SyntheticEvent, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../../../components/DefaultLayout";
 import Button from "@mui/material/Button";
@@ -22,18 +16,21 @@ import { Categories, Regions } from "../../company/constants";
 import { TableHeaderContainer } from "../../company/components/filter/style";
 import * as companyActions from "../../../store/modules/componies/index";
 import * as reviewActions from "../../../store/modules/reviews/index";
-import Editor from "react-medium-editor";
-import "medium-editor/dist/css/medium-editor.css";
-import "medium-editor/dist/css/themes/default.css";
+import { Editor as ToastEditor } from "@toast-ui/react-editor";
 import { Row } from "./style";
+import dynamic from "next/dynamic";
+const Editor = dynamic(() => import("../../../components/Editor/index"), {
+  ssr: false,
+});
 
 export default function Review() {
   const dispatch = useDispatch<AppDispatch>();
+  const editorRef = useRef<ToastEditor>(null);
   const { me } = useSelector((state: RootState) => state.users);
   const { companyList } = useSelector((state: RootState) => state.companies);
   const [categories, setCategories] = useState<string[]>([]); // 업체종류 선택값
   const [region, setRegion] = useState<any>(""); // 지역 선택값
-  const [text, setText] = useState();
+  const [text, setText] = useState("");
   const [rate, setRate] = useState<number | null>(2);
 
   const handleCategoriesChange = (
@@ -58,9 +55,12 @@ export default function Review() {
     );
   };
   // 편집기 변경
-  const handleChangeText = (text: any, medium: any) => {
-    console.log(medium);
-    setText(text);
+  const onChange = () => {
+    if (editorRef.current) {
+      const data = editorRef.current.getInstance().getHTML();
+      console.log(data);
+      setText(data);
+    }
   };
 
   const handleSubmit = (e: SyntheticEvent) => {
@@ -159,35 +159,20 @@ export default function Review() {
         {/* 편집기 */}
         <Row>
           <Editor
-            text={text}
-            onChange={handleChangeText}
-            options={{
-              toolbar: {
-                allowMultiParagraphSelection: true,
-                buttons: [
-                  "bold",
-                  "italic",
-                  "underline",
-                  "anchor",
-                  "h2",
-                  "h3",
-                  "quote",
-                ],
-                diffLeft: 0,
-                diffTop: -10,
-                firstButtonClass: "medium-editor-button-first",
-                lastButtonClass: "medium-editor-button-last",
-                relativeContainer: null,
-                standardizeSelectionStart: false,
-                static: false,
-                /* options which only apply when static is true */
-                align: "center",
-                sticky: false,
-                updateOnEmptySelection: false,
-              },
-            }}
-            className="textfield"
+            editorRef={editorRef}
+            text={"내용을 적어주세요!"}
+            onChange={onChange}
           />
+          {/* <ToastEditor
+            ref={editorRef}
+            initialValue="hello react editor world!"
+            previewStyle="vertical"
+            height="600px"
+            initialEditType="markdown"
+            useCommandShortcut={true}
+            language="ko-KR"
+            onChange={onChange}
+          /> */}
         </Row>
         {/* 평점 */}
         <Row>
