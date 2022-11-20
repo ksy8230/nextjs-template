@@ -28,13 +28,9 @@ MyApp.getInitialProps = wrapper.getInitialPageProps(
     let pageProps = {};
 
     const allCookies = ctx.req?.headers.cookie;
-    const parts = allCookies?.split(`; `);
-    let csrftoken = "" as string | undefined;
-    let sessionid = "" as string | undefined;
-    if (parts?.length === 2) {
-      csrftoken = parts?.[0]?.split("csrftoken=")?.[1];
-      sessionid = parts?.[1]?.split("sessionid=")?.[1];
-    }
+    let csrftoken = ctx.req?.cookies["csrftoken"] as string | undefined;
+    let sessionid = ctx.req?.cookies["sessionid"] as string | undefined;
+
     if (sessionid) {
       const res = await axios.get("http://localhost:8000/account/whoIam/", {
         withCredentials: true,
@@ -46,12 +42,14 @@ MyApp.getInitialProps = wrapper.getInitialPageProps(
         type: HYDRATE,
         payload: { users: { me: res.data } },
       });
-    } else {
-      store.dispatch({
-        type: HYDRATE,
-        payload: { hydrate: { username: "" } },
-      });
     }
+
+    // else {
+    //   store.dispatch({
+    //     type: HYDRATE,
+    //     payload: { users: { me: "" } },
+    //   });
+    // }
 
     // Component의 context로 ctx를 넣어주자
     if (Component.getInitialProps) {
