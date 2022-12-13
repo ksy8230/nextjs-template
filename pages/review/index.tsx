@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout";
 import Button from "@mui/material/Button";
@@ -6,14 +6,15 @@ import { AppDispatch, RootState } from "../../store";
 import { TableCustomContainer } from "../../components/Table/style";
 import Link from "next/link";
 import * as reviewActions from "../../store/modules/reviews/index";
-import { Row } from "./write/style";
 import Rating from "@mui/material/Rating";
-import Typography from "@mui/material/Typography";
-import { ReviewBox, ReviewContainer } from "./style";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import GrassIcon from "@mui/icons-material/Grass";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PersonIcon from "@mui/icons-material/Person";
+import {
+  ReviewBox,
+  ReviewContainer,
+} from "../../styles/styled-component/style";
 
 export default function Review() {
   const dispatch = useDispatch<AppDispatch>();

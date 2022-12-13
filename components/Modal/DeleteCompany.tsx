@@ -1,8 +1,8 @@
 import React from "react";
 import Modal from "@mui/material/Modal";
-import { ModalContent } from "../../../../components/TopNavigation/style";
 import Button from "@mui/material/Button";
-import { ISubmitFormModal } from "../../../../components/TopNavigation/components/types";
+import { ModalContent } from "../TopNavigation/style";
+import { ISubmitFormModal } from "../TopNavigation/components/types";
 
 const DeleteModal = ({
   openModal,

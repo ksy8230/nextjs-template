@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apis from "../../../api";
-import { ICompanyState, TCompony } from "./type";
 import Router from "next/router";
 
 // 초기 상태 정의

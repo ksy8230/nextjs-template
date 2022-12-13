@@ -4,11 +4,24 @@ import {
   useEffect,
   useState,
   useRef,
+  ChangeEvent,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../../../components/DefaultLayout";
-import Button from "@mui/material/Button";
+// import {
+//   Button,
+//   TextField,
+//   Autocomplete,
+//   InputLabel,
+//   FormControl,
+//   Select,
+//   SelectChangeEvent,
+//   MenuItem,
+//   Rating,
+//   Typography,
+// } from "@mui/material";
 import { AppDispatch, RootState } from "../../../store";
+import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputLabel from "@mui/material/InputLabel";
@@ -18,50 +31,39 @@ import MenuItem from "@mui/material/MenuItem";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { TableCustomContainer } from "../../../components/Table/style";
-import { Categories, Regions } from "../../company/constants";
-import { TableHeaderContainer } from "../../company/components/filter/style";
+import { TableHeaderContainer } from "../../../components/Filter/style";
 import * as companyActions from "../../../store/modules/componies/index";
 import * as reviewActions from "../../../store/modules/reviews/index";
 import { Editor as ToastEditor } from "@toast-ui/react-editor";
-// import "@toast-ui/editor/dist/toastui-editor.css";
-import { Row } from "../write/style";
 import { useRouter } from "next/router";
-import { GetStaticProps } from "next";
-import { api } from "../../../api/reviews";
+import { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
+import { requestFetch } from "../../../api/types";
+import { IReview } from "../../../store/modules/reviews/type";
+import { TCategory } from "../../../store/modules/componies/type";
+import { CATEGORIES, REGIONS } from "../../../constants";
+import { Row } from "../../../styles/styled-component/style";
 const Editor = dynamic(() => import("../../../components/Editor/index"), {
   ssr: false,
 });
 
-export default function ReviewEdit({ post }: any) {
+export default function ReviewEdit(props: IReview) {
   const dispatch = useDispatch<AppDispatch>();
   const editorRef = useRef<ToastEditor>(null);
   const router = useRouter();
   const { me } = useSelector((state: RootState) => state.users);
   const { companyList } = useSelector((state: RootState) => state.companies);
-  const { singleList } = useSelector((state: RootState) => state.reviews);
-  const [categories, setCategories] = useState<string[]>(
-    post.categories?.map((ctr: any) => ctr.code)
-  ); // 업체종류 선택값
-  const [region, setRegion] = useState<any>(post.region); // 지역 선택값
-  const [text, setText] = useState(post.content);
-  const [rate, setRate] = useState<number | null>(post.rate);
-  const [titleValue, setTitleValue] = useState(post.title);
+  const [categories, setCategories] = useState(
+    props.categories?.map((ctr) => ctr.code)
+  ); // 업체종류
+  const [region, setRegion] = useState(props.region); // 지역
+  const [companyName, setCompanyName] = useState(props.name); // 업체명
+  const [title, setTitle] = useState(props.title); // 제목
+  const [content, setContent] = useState(props.content); // 내용
+  const [rate, setRate] = useState<number>(props.rate); // 평점
 
-  const handleCategoriesChange = (
-    event: SelectChangeEvent<typeof categories | string>
-  ) => {
-    setCategories(
-      typeof event.target.value === "string"
-        ? event.target.value.split(",")
-        : event.target.value
-    );
-  };
-  const handleRegionChange = (event: SelectChangeEvent<any>) =>
-    setRegion(event.target.value);
   // 검색
   const handleSearch = () => {
-    console.log(categories, region);
     dispatch(
       companyActions.getCompaniesAND({
         searchCategory: categories,
@@ -69,40 +71,52 @@ export default function ReviewEdit({ post }: any) {
       })
     );
   };
-  // 편집기 변경
-  const onChange = () => {
-    if (editorRef.current) {
-      const data = editorRef.current.getInstance().getHTML();
-      console.log(data);
-      setText(data);
-    }
-  };
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    const target = e.target as EventTarget & any;
-    let result = (categories as string[]).map((v: string) => {
-      return { code: v };
-    });
+    let result = categories.map((v) => ({ code: v }));
 
     const form = {
       categories: result,
-      name: target.name.value,
-      region: region,
-      title: target.title.value,
-      content: text,
-      rate: rate,
+      name: companyName,
+      region,
+      title,
+      content,
+      rate,
       username: me?.username,
     };
-    console.log(form);
-    dispatch(reviewActions.updateReview({ data: form, id: post.id }));
+
+    dispatch(reviewActions.updateReview({ data: form, id: props.id }));
+  };
+
+  const handleCategoriesChange = (
+    event: SelectChangeEvent<typeof categories>
+  ) => setCategories(event.target.value as TCategory["code"][]);
+
+  const handleRegionChange = (event: SelectChangeEvent<number>) =>
+    setRegion(event.target.value as number);
+
+  const onChangeCompanyName = (e: SyntheticEvent, newValue: string | null) => {
+    newValue && setCompanyName(newValue);
+  };
+
+  const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const onChangeEditor = () => {
+    if (editorRef.current) {
+      const data = editorRef.current.getInstance().getHTML();
+      setContent(data);
+    }
+  };
+
+  const onChangeRate = (e: SyntheticEvent, newValue: number | null) => {
+    newValue && setRate(newValue);
   };
 
   useEffect(() => {
-    if (router.query) {
-      console.log(router.query);
-      dispatch(reviewActions.getSingleReview(router.query.id));
-    }
+    router.query && dispatch(reviewActions.getSingleReview(router.query.id));
   }, []);
 
   return (
@@ -116,11 +130,11 @@ export default function ReviewEdit({ post }: any) {
               labelId="companyCategories"
               id="companyCategories"
               multiple
-              value={categories}
+              value={categories || []}
               label="companyCategories"
               onChange={handleCategoriesChange}
             >
-              {Categories?.map((item: typeof Categories[0], i) => (
+              {CATEGORIES?.map((item: typeof CATEGORIES[0], i) => (
                 <MenuItem key={i} value={item.code}>
                   {item.name}
                 </MenuItem>
@@ -136,7 +150,7 @@ export default function ReviewEdit({ post }: any) {
               label="region"
               onChange={handleRegionChange}
             >
-              {Regions?.map((item: typeof Categories[0], i) => (
+              {REGIONS?.map((item: typeof REGIONS[0], i) => (
                 <MenuItem key={i} value={item.code}>
                   {item.name}
                 </MenuItem>
@@ -153,9 +167,10 @@ export default function ReviewEdit({ post }: any) {
             freeSolo
             id="name"
             size="small"
-            options={companyList}
-            getOptionLabel={(option: any) => option.name}
-            defaultValue={{ name: post.name }}
+            options={companyList.map((list) => list.name)}
+            getOptionLabel={(option) => option}
+            defaultValue={props.name}
+            onChange={onChangeCompanyName}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -176,25 +191,23 @@ export default function ReviewEdit({ post }: any) {
             fullWidth
             className="custom-field"
             size="small"
-            value={titleValue}
-            onChange={(v) => setTitleValue(v.target.value)}
+            value={title}
+            onChange={onChangeTitle}
             required
           />
         </Row>
         {/* 편집기 */}
         <Row>
-          <Editor editorRef={editorRef} text={text} onChange={onChange} />
+          <Editor
+            editorRef={editorRef}
+            text={content}
+            onChange={onChangeEditor}
+          />
         </Row>
         {/* 평점 */}
         <Row>
           <Typography component="legend">업체 리뷰 점수</Typography>
-          <Rating
-            name="simple-controlled"
-            value={rate}
-            onChange={(event, newValue) => {
-              setRate(newValue);
-            }}
-          />
+          <Rating name="rate" value={rate} onChange={onChangeRate} />
         </Row>
         <Button variant="outlined" type="submit">
           수정
@@ -204,10 +217,11 @@ export default function ReviewEdit({ post }: any) {
   );
 }
 
-export const getStaticPaths = async () => {
-  const res = await fetch("http://localhost:8000/review/list");
-  const reviewList = await res.json();
-  const paths = reviewList.map((post: any) => ({
+export const getStaticPaths: GetStaticPaths = async () => {
+  const reviewList = await requestFetch<IReview[]>(
+    `http://localhost:8000/review/list`
+  );
+  const paths = reviewList.map((post) => ({
     params: { id: `${post.id}` },
   }));
   return {
@@ -216,12 +230,21 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }: any) => {
-  const res = await fetch(`http://localhost:8000/review/${params.id}`);
-  const post = await res.json();
-  return {
-    props: { post },
-  };
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { id } = context.params as any;
+  try {
+    const review = await requestFetch<IReview>(
+      `http://localhost:8000/review/${id}`
+    );
+    return {
+      props: review,
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      props: {},
+    };
+  }
 };
 
 ReviewEdit.getLayout = function getLayout(page: ReactElement) {

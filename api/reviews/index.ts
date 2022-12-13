@@ -1,4 +1,3 @@
-// import { TCompony } from "../../store/modules/componies/type";
 import { socialApiClient } from "../client";
 
 export const api = {

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apis from "../../../api";
-import { ICompanyState, TCompony } from "./type";
+import { CategoryCode, ICompanyState, TCompony } from "./type";
 import Router from "next/router";
 
 // 초기 상태 정의
@@ -45,11 +45,7 @@ export const getCompanies = createAsyncThunk(
 
 export const getCompaniesAND = createAsyncThunk(
   "company/list_AND_region",
-  async (data: {
-    searchCategory: string | any[];
-    // searchRegion: string | number;
-    searchRegion: any;
-  }) => {
+  async (data: { searchCategory: CategoryCode[]; searchRegion: number }) => {
     const result = await apis.companiesApi.listAND(data);
     return result.data;
   }

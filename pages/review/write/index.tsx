@@ -12,13 +12,15 @@ import MenuItem from "@mui/material/MenuItem";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { TableCustomContainer } from "../../../components/Table/style";
-import { Categories, Regions } from "../../company/constants";
-import { TableHeaderContainer } from "../../company/components/filter/style";
+import { TableHeaderContainer } from "../../../components/Filter/style";
 import * as companyActions from "../../../store/modules/componies/index";
 import * as reviewActions from "../../../store/modules/reviews/index";
 import { Editor as ToastEditor } from "@toast-ui/react-editor";
-import { Row } from "./style";
+// import { Row } from "./style";
 import dynamic from "next/dynamic";
+import { CategoryCode, TCategory } from "../../../store/modules/componies/type";
+import { CATEGORIES, REGIONS } from "../../../constants";
+import { Row } from "../../../styles/styled-component/style";
 const Editor = dynamic(() => import("../../../components/Editor/index"), {
   ssr: false,
 });
@@ -28,20 +30,15 @@ export default function Review() {
   const editorRef = useRef<ToastEditor>(null);
   const { me } = useSelector((state: RootState) => state.users);
   const { companyList } = useSelector((state: RootState) => state.companies);
-  const [categories, setCategories] = useState<string[]>([]); // 업체종류 선택값
+  const [categories, setCategories] = useState<CategoryCode[]>([]); // 업체종류 선택값
   const [region, setRegion] = useState<any>(""); // 지역 선택값
   const [text, setText] = useState("");
   const [rate, setRate] = useState<number | null>(2);
 
   const handleCategoriesChange = (
-    event: SelectChangeEvent<typeof categories | string>
-  ) => {
-    setCategories(
-      typeof event.target.value === "string"
-        ? event.target.value.split(",")
-        : event.target.value
-    );
-  };
+    event: SelectChangeEvent<typeof categories>
+  ) => setCategories(event.target.value as TCategory["code"][]);
+
   const handleRegionChange = (event: SelectChangeEvent<any>) =>
     setRegion(event.target.value);
   // 검색
@@ -66,9 +63,7 @@ export default function Review() {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as EventTarget & any;
-    let result = (categories as string[]).map((v: string) => {
-      return { code: v };
-    });
+    let result = categories.map((v) => ({ code: v }));
 
     const form = {
       categories: result,
@@ -98,7 +93,7 @@ export default function Review() {
               label="companyCategories"
               onChange={handleCategoriesChange}
             >
-              {Categories?.map((item: typeof Categories[0], i) => (
+              {CATEGORIES?.map((item: typeof CATEGORIES[0], i) => (
                 <MenuItem key={i} value={item.code}>
                   {item.name}
                 </MenuItem>
@@ -114,7 +109,7 @@ export default function Review() {
               label="region"
               onChange={handleRegionChange}
             >
-              {Regions?.map((item: typeof Categories[0], i) => (
+              {REGIONS?.map((item: typeof REGIONS[0], i) => (
                 <MenuItem key={i} value={item.code}>
                   {item.name}
                 </MenuItem>
@@ -163,16 +158,6 @@ export default function Review() {
             text={"내용을 적어주세요!"}
             onChange={onChange}
           />
-          {/* <ToastEditor
-            ref={editorRef}
-            initialValue="hello react editor world!"
-            previewStyle="vertical"
-            height="600px"
-            initialEditType="markdown"
-            useCommandShortcut={true}
-            language="ko-KR"
-            onChange={onChange}
-          /> */}
         </Row>
         {/* 평점 */}
         <Row>

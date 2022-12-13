@@ -5,8 +5,8 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Categories, FilterMainList, Regions } from "../../constants";
 import { FilterCustomContainer } from "./style";
+import { CATEGORIES, FILTER_MAIN_LIST, REGIONS } from "../../constants";
 
 const FilterContainer = ({
   value,
@@ -27,7 +27,7 @@ const FilterContainer = ({
           label="filter"
           onChange={handleFilter}
         >
-          {FilterMainList.map((item: typeof FilterMainList[0], i) => (
+          {FILTER_MAIN_LIST.map((item: typeof FILTER_MAIN_LIST[0], i) => (
             <MenuItem key={i} value={item.code}>
               {item.name}
             </MenuItem>
@@ -45,7 +45,7 @@ const FilterContainer = ({
             value={value.searchValue}
             onChange={handleFilterCategoriesValueChange}
           >
-            {Categories.map((item: typeof Categories[0], i) => (
+            {CATEGORIES.map((item: typeof CATEGORIES[0], i) => (
               <MenuItem key={i} value={item.code}>
                 {item.name}
               </MenuItem>
@@ -62,7 +62,7 @@ const FilterContainer = ({
             value={value.searchValue}
             onChange={handleFilterRegionValueChange}
           >
-            {Regions.map((item: typeof Regions[0], i) => (
+            {REGIONS.map((item: typeof REGIONS[0], i) => (
               <MenuItem key={i} value={item.code}>
                 {item.name}
               </MenuItem>

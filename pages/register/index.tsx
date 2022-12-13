@@ -11,7 +11,6 @@ import DefaultLayout from "../../components/DefaultLayout";
 import * as counterActions from "../../store/modules/counter";
 import apis from "../../api";
 import { AppDispatch } from "../../store";
-import {} from "./style";
 import axios from "axios";
 
 // const getAsync = createAsyncThunk(`counter/getAsync`, async () => {

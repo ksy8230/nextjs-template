@@ -2,13 +2,13 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import { ModalContent } from "../../../../components/TopNavigation/style";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { Categories, Regions } from "../../constants";
-import { IAddCompanyModal } from "../types";
+import { ModalContent } from "../TopNavigation/style";
+import { CATEGORIES, REGIONS } from "../../constants";
+import { IAddCompanyModal } from "./types";
 
 const AddModal = ({
   openModal,
@@ -46,7 +46,7 @@ const AddModal = ({
               label="companyCategories"
               onChange={handleCategoriesChange}
             >
-              {Categories?.map((item: typeof Categories[0], i) => (
+              {CATEGORIES?.map((item: typeof CATEGORIES[0], i) => (
                 <MenuItem key={i} value={item.code}>
                   {item.name}
                 </MenuItem>
@@ -62,7 +62,7 @@ const AddModal = ({
               label="region"
               onChange={handleRegionChange}
             >
-              {Regions?.map((item: typeof Categories[0], i) => (
+              {REGIONS?.map((item: typeof REGIONS[0], i) => (
                 <MenuItem key={i} value={item.code}>
                   {item.name}
                 </MenuItem>

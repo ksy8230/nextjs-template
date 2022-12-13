@@ -2,13 +2,13 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import { ModalContent } from "../../../../components/TopNavigation/style";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { Categories, Regions } from "../../constants";
-import { IEditCompanyModal } from "../types";
+import { ModalContent } from "../TopNavigation/style";
+import { IEditCompanyModal } from "./types";
+import { REGIONS, CATEGORIES } from "../../constants";
 
 const EditModal = ({
   openModal,
@@ -36,7 +36,7 @@ const EditModal = ({
             fullWidth
             className="custom-field"
             required
-            defaultValue={company.name}
+            defaultValue={company?.name}
           />
           <FormControl required fullWidth className="custom-field">
             <InputLabel id="companyCategories">업체종류</InputLabel>
@@ -44,13 +44,13 @@ const EditModal = ({
               labelId="companyCategories"
               id="companyCategories"
               multiple
-              value={value.categories}
+              value={value?.categories}
               label="companyCategories"
               onChange={handleCategoriesChange}
             >
-              {Categories?.map((item: typeof Categories[0], i) => (
-                <MenuItem key={i} value={item.code}>
-                  {item.name}
+              {CATEGORIES?.map((item: typeof CATEGORIES[0], i) => (
+                <MenuItem key={i} value={item?.code}>
+                  {item?.name}
                 </MenuItem>
               ))}
             </Select>
@@ -64,9 +64,9 @@ const EditModal = ({
               label="region"
               onChange={handleRegionChange}
             >
-              {Regions?.map((item: typeof Categories[0], i) => (
-                <MenuItem key={i} value={item.code}>
-                  {item.name}
+              {REGIONS?.map((item: typeof REGIONS[0], i) => (
+                <MenuItem key={i} value={item?.code}>
+                  {item?.name}
                 </MenuItem>
               ))}
             </Select>
@@ -78,7 +78,7 @@ const EditModal = ({
             type="tel"
             fullWidth
             className="custom-field"
-            defaultValue={company.phone}
+            defaultValue={company?.phone}
           />
           <TextField
             id="siteUrl"
@@ -86,7 +86,7 @@ const EditModal = ({
             variant="outlined"
             fullWidth
             className="custom-field"
-            defaultValue={company.siteUrl}
+            defaultValue={company?.siteUrl}
           />
           <Button type="submit" variant="contained" fullWidth>
             Edit

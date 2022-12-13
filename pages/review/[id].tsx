@@ -4,7 +4,6 @@ import DefaultLayout from "../../components/DefaultLayout";
 import * as reviewActions from "../../store/modules/reviews/index";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
-import Editor from "react-medium-editor";
 import Rating from "@mui/material/Rating";
 import Button from "@mui/material/Button";
 import Link from "next/link";
@@ -13,7 +12,10 @@ import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import GrassIcon from "@mui/icons-material/Grass";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
-import { ReviewDetailInfo, ReviewHeader } from "./style";
+import {
+  ReviewDetailInfo,
+  ReviewHeader,
+} from "../../styles/styled-component/style";
 
 export default function DetailReview() {
   const { singleList } = useSelector((state: RootState) => state.reviews);
@@ -73,14 +75,14 @@ export default function DetailReview() {
         </div>
       </ReviewDetailInfo>
       <h3>{singleList.title}</h3>
-      <Editor
+      {/* <Editor
         text={singleList.content}
         options={{
           toolbar: false,
           disableEditing: true,
         }}
         className="detail-textfield"
-      />
+      /> */}
       <Comment
         reviewId={router.query.id}
         commentLists={singleList.comment_set}

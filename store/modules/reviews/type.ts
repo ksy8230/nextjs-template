@@ -1,29 +1,9 @@
-export type TCategory = {
-  // code: string | number;
-  code: any;
-};
+import { TCompony } from "../componies/type";
 
-export type TCompony = {
-  id?: number;
-  name: string;
-  categories: TCategory[];
-  // region: string | number;
-  region: number | "" | undefined;
-  phone?: string;
-  siteUrl?: string;
-  username?: string;
-};
-
-export type TRegisterCompony = {
-  name: { value: string };
-  categories: { value: string[] };
-  region: { value: number };
-  phone?: { value: string };
-  siteUrl?: { value: string };
-};
-
-export interface ICompanyState {
-  companyList: TCompony[];
-  isLoading: boolean;
-  error: string;
+export interface IReview extends TCompony {
+  id: number;
+  title: string; // 리뷰 제목
+  content: string; // 리뷰 내용
+  rate: number; // 리뷰 평점
+  updated_at: string; // 리뷰 업데이트 날짜
 }

@@ -17,8 +17,7 @@ const SOCIAL_SERVER_URL = `${
 }//${process.env.NEXT_PUBLIC_API_HOST || windowHost}:${
   process.env.NEXT_PUBLIC_PORT || windowPort
 }${process.env.NEXT_PUBLIC_PREFIX}`;
-
-// console.log("SOCIAL_SERVER_URL =", SOCIAL_SERVER_URL);
+console.log("SOCIAL_SERVER_URL", SOCIAL_SERVER_URL);
 
 function apiRequestProtocol() {
   if (process.env.NEXT_PUBLIC_TOKEN_AUTH === "1") {

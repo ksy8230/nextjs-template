@@ -2,13 +2,14 @@ import { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout";
 import { AppDispatch } from "../../store";
-import {
-  HomeH3,
-  HomeHistory,
-  HomeInformation,
-  HomeProject,
-  HomeSkill,
-} from "./style";
+import { HomeInformation } from "../../styles/styled-component/style";
+// import {
+//   HomeH3,
+//   HomeHistory,
+//   HomeInformation,
+//   HomeProject,
+//   HomeSkill,
+// } from "./style";
 
 // const getAsync = createAsyncThunk(`counter/getAsync`, async () => {
 //   //   const result = await apis.counterApi.getCount();

@@ -1,7 +1,6 @@
 import React, { SyntheticEvent, useState } from "react";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import Button from "@mui/material/Button";
-import { CommentContainer } from "../write/style";
 import CommentIcon from "@mui/icons-material/Comment";
 import * as reviewActions from "../../../store/modules/reviews/index";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +8,7 @@ import { AppDispatch, RootState } from "../../../store";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { CommentContainer } from "../../../styles/styled-component/style";
 
 type TCommnet = {
   reviewId: string | string[] | undefined;

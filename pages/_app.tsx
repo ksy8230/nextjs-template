@@ -27,29 +27,25 @@ MyApp.getInitialProps = wrapper.getInitialPageProps(
     const { ctx, Component } = context;
     let pageProps = {};
 
-    const allCookies = ctx.req?.headers.cookie;
-    let csrftoken = ctx.req?.cookies["csrftoken"] as string | undefined;
-    let sessionid = ctx.req?.cookies["sessionid"] as string | undefined;
+    if (process.browser) {
+      const allCookies = ctx.req?.headers.cookie;
+      // let csrftoken = ctx.req?.cookies["csrftoken"] as string | undefined;
+      let sessionid = ctx.req?.cookies["sessionid"] as string | undefined;
 
-    if (sessionid) {
-      const res = await axios.get("http://localhost:8000/account/whoIam/", {
-        withCredentials: true,
-        headers: {
-          Cookie: allCookies as string,
-        },
-      });
-      store.dispatch({
-        type: HYDRATE,
-        payload: { users: { me: res.data } },
-      });
+      if (sessionid) {
+        const res = await axios.get("http://localhost:8000/account/whoIam/", {
+          withCredentials: true,
+          headers: {
+            Cookie: allCookies as string,
+          },
+        });
+
+        store.dispatch({
+          type: HYDRATE,
+          payload: { users: { me: res.data } },
+        });
+      }
     }
-
-    // else {
-    //   store.dispatch({
-    //     type: HYDRATE,
-    //     payload: { users: { me: "" } },
-    //   });
-    // }
 
     // Component의 context로 ctx를 넣어주자
     if (Component.getInitialProps) {

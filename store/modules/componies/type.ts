@@ -1,14 +1,18 @@
+export enum CategoryCode {
+  hospital = 1,
+  food = 2,
+  product = 3,
+}
+
 export type TCategory = {
-  // code: string | number;
-  code: any;
+  code: CategoryCode.hospital | CategoryCode.food | CategoryCode.product;
 };
 
 export type TCompony = {
-  id?: number;
+  id: number;
   name: string;
   categories: TCategory[];
-  // region: string | number;
-  region: any;
+  region: number;
   phone?: string;
   siteUrl?: string;
   username?: string;

@@ -1,4 +1,4 @@
-export const Regions = [
+export const REGIONS = [
   { code: 0, name: "" },
   { code: 1, name: "서울" },
   { code: 2, name: "부산" },
@@ -20,13 +20,13 @@ export const Regions = [
   { code: 18, name: "무관" },
 ];
 
-export const Categories = [
+export const CATEGORIES = [
   { code: 1, name: "병원" },
   { code: 2, name: "먹이" },
   { code: 3, name: "용품" },
 ];
 
-export const FilterMainList = [
+export const FILTER_MAIN_LIST = [
   { code: "name", name: "업체명" },
   { code: "categories", name: "업체종류" },
   { code: "region", name: "지역" },

@@ -12,31 +12,33 @@ import Button from "@mui/material/Button";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import TableContainer from "@mui/material/TableContainer";
-import AddModal from "./components/addModal";
 import { SelectChangeEvent } from "@mui/material/Select";
 import {
+  CategoryCode,
   TCategory,
+  TCompony,
   TRegisterCompony,
 } from "../../store/modules/componies/type";
 import * as companyActions from "../../store/modules/componies/index";
-import { transCode } from "./helper";
-import { Categories, Regions } from "./constants";
-import EditModal from "./components/editModal";
-import DeleteModal from "./components/deleteModal";
+import { CATEGORIES, REGIONS } from "../../constants";
 import { TableCustomContainer } from "../../components/Table/style";
-import FilterContainer from "./components/filter";
-import { TableHeaderContainer } from "./components/filter/style";
-import { Tag } from "./style";
+import { TableHeaderContainer } from "../../components/Filter/style";
+import { Tag } from "../../styles/styled-component/style";
+import { dataFormUtil } from "../../helper";
+import AddModal from "../../components/Modal/AddCompany";
+import EditModal from "../../components/Modal/EditCompany";
+import DeleteModal from "../../components/Modal/DeleteCompany";
+import FilterContainer from "../../components/Filter";
 
 export default function Company() {
   const dispatch = useDispatch<AppDispatch>();
   const { me } = useSelector((state: RootState) => state.users);
   const { companyList } = useSelector((state: RootState) => state.companies);
-  const [currentCompany, setCurrentCompany] = useState<any>({});
-  const [categories, setCategories] = useState<any[]>([]); // 업체종류 선택값
-  const [region, setRegion] = useState<any>(""); // 지역 선택값
-  const [filter, setFilter] = useState<string>(""); // 필터 선택값
-  const [searchValue, setSearchValue] = useState<string | any[]>([]); // 검색어 값
+  const [currentCompany, setCurrentCompany] = useState<TCompony | null>(null);
+  const [categories, setCategories] = useState<CategoryCode[]>([]); // 업체종류 선택값
+  const [region, setRegion] = useState(1); // 지역 선택값
+  const [filter, setFilter] = useState(""); // 필터 선택값
+  const [searchValue, setSearchValue] = useState<any>(null); // 검색어 값
 
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -45,7 +47,7 @@ export default function Company() {
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
 
-  const handleOpenEdit = (id: number | undefined) => {
+  const handleOpenEdit = (id: number) => {
     const idx = companyList.findIndex((c) => c.id == id);
     const current = companyList[idx];
     setCurrentCompany(current);
@@ -55,11 +57,11 @@ export default function Company() {
     setOpenEdit(true);
   };
   const handleCloseEdit = () => {
-    setCurrentCompany({});
+    setCurrentCompany(null);
     setOpenEdit(false);
   };
 
-  const handleOpenDelete = (id: number | undefined) => {
+  const handleOpenDelete = (id: number) => {
     const idx = companyList.findIndex((c) => c.id == id);
     const current = companyList[idx];
     setCurrentCompany(current);
@@ -71,77 +73,69 @@ export default function Company() {
   const onSubmitAdd = (e: SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as EventTarget & TRegisterCompony;
-    let result = (categories as string[]).map((v: string) => {
-      return { code: v };
-    });
+    let result = categories.map((v) => ({ code: v }));
     const form = {
       name: target.name.value,
       categories: result,
       region: region,
       phone: target.phone?.value,
       siteUrl: target.siteUrl?.value,
-      // username: me?.username,
     };
     console.log(form);
-    dispatch(companyActions.registerCompany(form));
+    // dispatch(companyActions.registerCompany(form));
   };
   // 수정 폼 전송
   const onSubmitEdit = (e: SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as EventTarget & TRegisterCompony;
-    let result = (categories as string[]).map((v: string) => {
-      return { code: v };
-    });
-    const form = {
-      name: target.name.value,
-      categories: result,
-      region: region,
-      phone: target.phone?.value,
-      siteUrl: target.siteUrl?.value,
-      username: me?.username,
-    };
-    dispatch(
-      companyActions.updateCompany({ data: form, id: currentCompany.id })
-    );
+    let result = categories.map((v) => ({ code: v }));
+
+    if (currentCompany) {
+      const form = {
+        id: currentCompany.id,
+        name: target.name.value,
+        categories: result,
+        region: region,
+        phone: target.phone?.value,
+        siteUrl: target.siteUrl?.value,
+        username: me?.username,
+      };
+      dispatch(
+        companyActions.updateCompany({ data: form, id: currentCompany.id })
+      );
+    }
   };
   // 삭제 확인
   const onConfirmDelete = () => {
-    dispatch(companyActions.deleteCompany(currentCompany.id));
+    currentCompany && dispatch(companyActions.deleteCompany(currentCompany.id));
   };
 
-  const handleRegionChange = (event: SelectChangeEvent<any>) =>
-    setRegion(event.target.value);
+  const handleRegionChange = (event: SelectChangeEvent<number>) =>
+    setRegion(event.target.value as number);
 
   const handleCategoriesChange = (
-    event: SelectChangeEvent<typeof categories | typeof filter>
-  ) => {
-    setCategories(
-      typeof event.target.value === "string"
-        ? event.target.value.split(",")
-        : event.target.value
-    );
-  };
+    event: SelectChangeEvent<typeof categories>
+  ) => setCategories(event.target.value as TCategory["code"][]);
+
   // 필터 > 대표 필터 검색
   const handleFilter = (event: SelectChangeEvent<string>) =>
     setFilter(event.target.value);
+
   // 필터 > 업체종류 검색
   const handleFilterCategoriesValueChange = (
-    event: SelectChangeEvent<typeof categories | typeof filter>
+    event: SelectChangeEvent<typeof categories>
   ) => {
-    console.log(event.target.value);
-    setSearchValue(
-      typeof event.target.value === "string"
-        ? event.target.value.split(",")
-        : event.target.value
-    );
+    setSearchValue(event.target.value as TCategory["code"][]);
   };
 
   // 필터 > 지역 검색
-  const handleFilterRegionValueChange = (event: SelectChangeEvent<string>) =>
+  const handleFilterRegionValueChange = (event: SelectChangeEvent<number>) =>
     setSearchValue(event.target.value);
+
   // 필터 > 검색어
   const handleSearchValueChange = (event: SelectChangeEvent<string>) =>
     setSearchValue(event.target.value);
+
   // 검색
   const handleSearch = () => {
     dispatch(
@@ -197,25 +191,25 @@ export default function Company() {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {row?.name}
                 </TableCell>
                 <TableCell align="left">
-                  {row.categories?.map((ctr: TCategory, i) => (
+                  {row?.categories?.map((ctr: TCategory, i) => (
                     <Tag code={ctr.code} key={i}>
-                      {transCode(Categories, ctr.code)}
+                      {dataFormUtil.transCode(CATEGORIES, ctr.code)}
                     </Tag>
                   ))}
                 </TableCell>
                 <TableCell align="left">
-                  {transCode(Regions, row.region)}
+                  {dataFormUtil.transCode(REGIONS, row?.region)}
                 </TableCell>
                 <TableCell align="left">{row.phone}</TableCell>
                 <TableCell align="left">
                   <a href={row.siteUrl}>icon</a>
                 </TableCell>
-                <TableCell align="center">{row.username || ""}</TableCell>
+                <TableCell align="center">{row?.username || ""}</TableCell>
                 <TableCell align="center">
-                  {me?.name == row.username && (
+                  {me?.name == row?.username && (
                     <>
                       <Button
                         variant="outlined"
