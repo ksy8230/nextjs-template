@@ -17,7 +17,7 @@ export const login = createAsyncThunk(
   "user/login",
   async (data: TLoginData) => {
     const result = await apis.usersApi.login(data);
-    console.log(result);
+    // console.log(result);
     if (result?.data?.data) Router.reload();
   }
 );
@@ -36,7 +36,7 @@ export const register = createAsyncThunk(
 
 export const whoIam = createAsyncThunk("user/whoIam", async () => {
   const result = await apis.usersApi.whoIam();
-  console.log(result);
+  console.log("whoIam get call");
   return result.data;
 });
 

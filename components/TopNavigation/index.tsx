@@ -96,18 +96,16 @@ const TopNavigation = () => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    dispatch(userActions.whoIam());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(userActions.whoIam());
+  // }, []);
 
   return (
     <>
       <div className="flex items-center justify-between max-w-[80rem] m-auto">
         <div className="pt-4 pb-4 flex items-center">
           <span>
-            <Link href="/home">
-              <IconHome />
-            </Link>
+            <Link href="/home">HOME</Link>
           </span>
           <span className="ml-4">
             <Link href="/company">업체 등록</Link>

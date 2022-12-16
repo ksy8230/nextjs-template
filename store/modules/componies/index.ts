@@ -19,27 +19,11 @@ export const registerCompany = createAsyncThunk(
   }
 );
 
-export const updateCompany = createAsyncThunk(
-  "company/update",
-  async (data: { data: TCompony; id: number }) => {
-    const result = await apis.companiesApi.update(data.data, data.id);
-    if (result?.data) Router.reload();
-  }
-);
-
 export const deleteCompany = createAsyncThunk(
   "company/delete",
   async (id: number) => {
     await apis.companiesApi.delete(id);
     Router.reload();
-  }
-);
-
-export const getCompanies = createAsyncThunk(
-  "company/list",
-  async (data: { searchType: string; searchValue: string | any[] }) => {
-    const result = await apis.companiesApi.list(data);
-    return result.data;
   }
 );
 
@@ -81,20 +65,6 @@ const companySlice = createSlice({
     [deleteCompany.rejected.type]: (state, action) => {
       state.isLoading = false;
       state.error = "업체 삭제에 실패했습니다.";
-    },
-    // list
-    [getCompanies.pending.type]: (state, action) => {
-      state.isLoading = true;
-      state.error = "";
-    },
-    [getCompanies.fulfilled.type]: (state, action) => {
-      state.isLoading = false;
-      state.companyList = action.payload || [];
-      state.error = "";
-    },
-    [getCompanies.rejected.type]: (state, action) => {
-      state.isLoading = false;
-      state.error = "리스트 조회에 실패했습니다.";
     },
     // list_AND_region
     [getCompaniesAND.pending.type]: (state, action) => {

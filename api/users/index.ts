@@ -69,10 +69,12 @@ export const api = {
   validCookie() {
     const allCookies =
       typeof document === "undefined" ? ({} as any) : `; ${document.cookie}`;
-    const parts = allCookies.split(`; csrftoken=`);
+
     let csrftoken;
-    if (parts.length === 2) {
-      csrftoken = parts.pop().split(";").shift();
+    if (allCookies && Object.keys(allCookies).length !== 0) {
+      const parts = allCookies?.split(`; csrftoken=`);
+      if (parts.length === 2) csrftoken = parts.pop().split(";").shift();
+      return { csrftoken };
     }
     return { csrftoken };
   },
