@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { FilterCustomContainer } from "./style";
 import { CATEGORIES, FILTER_MAIN_LIST, REGIONS } from "../../constants";
+import { IconSearch } from "../Icon";
 
 const FilterContainer = ({
   value,
@@ -81,8 +82,8 @@ const FilterContainer = ({
         />
       )}
 
-      <Button type="button" variant="contained" onClick={handleSearch}>
-        검색
+      <Button type="button" onClick={handleSearch}>
+        <IconSearch />
       </Button>
     </FilterCustomContainer>
   );

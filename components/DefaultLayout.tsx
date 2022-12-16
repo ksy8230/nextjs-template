@@ -12,13 +12,9 @@ type LayoutProps = {
 const DefaultLayout = ({ children }: LayoutProps) => {
   return (
     <div className="default-layout">
-      <div className="default-layout__top-navigation">
-        <TopNavigation />
-      </div>
-      <div className="default-layout__container__content">{children}</div>
-      <footer className="default-layout__footer">
-        <Footer />
-      </footer>
+      <TopNavigation />
+      <div className="max-w-[80rem] m-auto pb-[4rem] min-h-fit">{children}</div>
+      <Footer />
     </div>
   );
 };
