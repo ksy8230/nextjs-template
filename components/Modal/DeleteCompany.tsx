@@ -19,7 +19,7 @@ const DeleteModal = ({
     >
       <ModalContent>
         <p>해당 업체를 리스트에서 삭제하시겠습니까?</p>
-        <Button type="button" variant="contained" fullWidth onClick={onSubmit}>
+        <Button type="button" fullWidth onClick={onSubmit}>
           DELETE
         </Button>
         {error && <p>{error}</p>}

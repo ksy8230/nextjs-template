@@ -108,7 +108,7 @@ const TopNavigation = () => {
             <Link href="/home">HOME</Link>
           </span>
           <span className="ml-4">
-            <Link href="/company">업체 등록</Link>
+            <Link href="/company">업체 조회</Link>
           </span>
           <span className="ml-4">
             <Link href="/review">업체 리뷰</Link>

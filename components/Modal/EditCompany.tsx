@@ -88,7 +88,7 @@ const EditModal = ({
             className="custom-field"
             defaultValue={company?.siteUrl}
           />
-          <Button type="submit" variant="contained" fullWidth>
+          <Button type="submit" fullWidth>
             Edit
           </Button>
         </form>

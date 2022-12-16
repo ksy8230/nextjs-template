@@ -1,18 +1,23 @@
-import { TCompony } from "../../store/modules/componies/type";
 import { socialApiClient } from "../client";
-import { IGetCompaniesReq, IPutCompaniesReq } from "./types";
+import {
+  IGetCompaniesReq,
+  IPutCompanyReq,
+  IPostCompanyReq,
+  IDeleteCompanyReq,
+} from "./types";
 
 export const api = {
-  register(data: TCompony) {
-    return socialApiClient.post("/company/register/", data);
+  async register(data: IPostCompanyReq) {
+    const res = await socialApiClient.post("/company/register/", data);
+    return res.data;
   },
-  async update(data: IPutCompaniesReq) {
-    console.log(data, data.id);
+  async update(data: IPutCompanyReq) {
     const res = await socialApiClient.put(`/company/update/${data.id}`, data);
     return res.data;
   },
-  delete(id: number) {
-    return socialApiClient.delete(`/company/delete/${id}`);
+  async delete(data: IDeleteCompanyReq) {
+    const res = await socialApiClient.delete(`/company/delete/${data.id}`);
+    return res.data;
   },
   async list(data: IGetCompaniesReq) {
     let uri = "/company/list";
@@ -21,12 +26,5 @@ export const api = {
     }
     const res = await socialApiClient.get(uri);
     return res.data;
-  },
-  listAND(data: any) {
-    let uri = "/company/listWrite";
-    if (data.searchCategory) {
-      uri = `/company/listWrite?searchCategory=${data.searchCategory}&searchRegion=${data.searchRegion}`;
-    }
-    return socialApiClient.get(uri);
   },
 };
