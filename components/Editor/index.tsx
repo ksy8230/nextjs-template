@@ -1,17 +1,27 @@
-import { Editor as ToastEditor } from "@toast-ui/react-editor";
+import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 
-export default function Editor({ editorRef, text, onChange }: any) {
-  return (
-    <ToastEditor
-      ref={editorRef}
-      initialValue={text}
-      previewStyle="vertical"
-      height="600px"
-      initialEditType="wysiwyg"
-      useCommandShortcut={true}
-      language="ko-KR"
-      onChange={onChange}
-    />
-  );
+interface IEditorProps {
+  content: string;
+  editorRef: React.MutableRefObject<any>;
 }
+
+const TuiEditor = ({ content = "", editorRef }: IEditorProps) => {
+  return (
+    <>
+      {editorRef && (
+        <Editor
+          ref={editorRef}
+          initialValue={content || ""}
+          initialEditType="wysiwyg"
+          previewStyle="vertical"
+          height="600px"
+          hideModeSwitch={true}
+          language="ko-KR"
+        />
+      )}
+    </>
+  );
+};
+
+export default TuiEditor;

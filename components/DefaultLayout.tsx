@@ -13,7 +13,9 @@ const DefaultLayout = ({ children }: LayoutProps) => {
   return (
     <div className="default-layout">
       <TopNavigation />
-      <div className="max-w-[80rem] m-auto pb-[4rem] min-h-fit">{children}</div>
+      <div className="max-w-[80rem] m-auto pt-[2rem] pb-[4rem] min-h-fit">
+        {children}
+      </div>
       <Footer />
     </div>
   );

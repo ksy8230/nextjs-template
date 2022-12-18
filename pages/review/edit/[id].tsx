@@ -8,18 +8,6 @@ import {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../../../components/DefaultLayout";
-// import {
-//   Button,
-//   TextField,
-//   Autocomplete,
-//   InputLabel,
-//   FormControl,
-//   Select,
-//   SelectChangeEvent,
-//   MenuItem,
-//   Rating,
-//   Typography,
-// } from "@mui/material";
 import { AppDispatch, RootState } from "../../../store";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -31,10 +19,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { TableCustomContainer } from "../../../components/Table/style";
-import { TableHeaderContainer } from "../../../components/Filter/style";
 import * as companyActions from "../../../store/modules/componies/index";
 import * as reviewActions from "../../../store/modules/reviews/index";
-import { Editor as ToastEditor } from "@toast-ui/react-editor";
 import { useRouter } from "next/router";
 import { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
@@ -43,13 +29,18 @@ import { IReview } from "../../../store/modules/reviews/type";
 import { TCategory } from "../../../store/modules/componies/type";
 import { CATEGORIES, REGIONS } from "../../../constants";
 import { Row } from "../../../styles/styled-component/style";
-const Editor = dynamic(() => import("../../../components/Editor/index"), {
+import { useQuery } from "react-query";
+import apis from "../../../api";
+import { IGetReviewRes } from "../../../api/reviews/types";
+import { IErrorResponse } from "../../../api/companies/types";
+
+const NoSSREditor = dynamic(() => import("../../../components/Editor/index"), {
   ssr: false,
 });
 
 export default function ReviewEdit(props: IReview) {
   const dispatch = useDispatch<AppDispatch>();
-  const editorRef = useRef<ToastEditor>(null);
+  // const editorRef = useRef<ToastEditor>(null);
   const router = useRouter();
   const { me } = useSelector((state: RootState) => state.users);
   const { companyList } = useSelector((state: RootState) => state.companies);
@@ -61,15 +52,16 @@ export default function ReviewEdit(props: IReview) {
   const [title, setTitle] = useState(props.title); // 제목
   const [content, setContent] = useState(props.content); // 내용
   const [rate, setRate] = useState<number>(props.rate); // 평점
+  const editorRef = useRef<any>(null);
 
   // 검색
   const handleSearch = () => {
-    dispatch(
-      companyActions.getCompaniesAND({
-        searchCategory: categories,
-        searchRegion: region,
-      })
-    );
+    // dispatch(
+    //   companyActions.getCompaniesAND({
+    //     searchCategory: categories,
+    //     searchRegion: region,
+    //   })
+    // );
   };
 
   const handleSubmit = (e: SyntheticEvent) => {
@@ -104,26 +96,34 @@ export default function ReviewEdit(props: IReview) {
     setTitle(e.target.value);
   };
 
-  const onChangeEditor = () => {
-    if (editorRef.current) {
-      const data = editorRef.current.getInstance().getHTML();
-      setContent(data);
-    }
-  };
+  // const onChangeEditor = () => {
+  //   if (editorRef.current) {
+  //     const data = editorRef.current.getInstance().getHTML();
+  //     setContent(data);
+  //   }
+  // };
 
   const onChangeRate = (e: SyntheticEvent, newValue: number | null) => {
     newValue && setRate(newValue);
   };
 
-  useEffect(() => {
-    router.query && dispatch(reviewActions.getSingleReview(router.query.id));
-  }, []);
+  // useEffect(() => {
+  //   router.query && dispatch(reviewActions.getSingleReview(router.query.id));
+  // }, []);
+
+  const {
+    data: singleList,
+    isLoading,
+    refetch,
+  } = useQuery<IGetReviewRes, IErrorResponse>(["review", router], () =>
+    apis.reviewsApi.singleList({ id: router.query.id })
+  );
 
   return (
     <TableCustomContainer>
       <form onSubmit={handleSubmit}>
         {/* 업체 종류, 지역 */}
-        <TableHeaderContainer>
+        <div className="flex">
           <FormControl required fullWidth className="custom-field" size="small">
             <InputLabel id="companyCategories">업체종류</InputLabel>
             <Select
@@ -157,10 +157,10 @@ export default function ReviewEdit(props: IReview) {
               ))}
             </Select>
           </FormControl>
-          <Button type="button" variant="contained" onClick={handleSearch}>
+          <Button type="button" variant="outlined" onClick={handleSearch}>
             검색
           </Button>
-        </TableHeaderContainer>
+        </div>
         {/* 업체명 */}
         <Row>
           <Autocomplete
@@ -191,23 +191,25 @@ export default function ReviewEdit(props: IReview) {
             fullWidth
             className="custom-field"
             size="small"
-            value={title}
+            value={singleList?.title}
             onChange={onChangeTitle}
             required
           />
         </Row>
         {/* 편집기 */}
         <Row>
-          <Editor
-            editorRef={editorRef}
-            text={content}
-            onChange={onChangeEditor}
-          />
+          {singleList?.content && (
+            <NoSSREditor content={singleList?.content} editorRef={editorRef} />
+          )}
         </Row>
         {/* 평점 */}
         <Row>
           <Typography component="legend">업체 리뷰 점수</Typography>
-          <Rating name="rate" value={rate} onChange={onChangeRate} />
+          <Rating
+            name="rate"
+            value={singleList?.rate}
+            onChange={onChangeRate}
+          />
         </Row>
         <Button variant="outlined" type="submit">
           수정

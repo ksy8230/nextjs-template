@@ -21,7 +21,6 @@ import {
 } from "../../store/modules/componies/type";
 import { CATEGORIES, REGIONS } from "../../constants";
 import { TableCustomContainer } from "../../components/Table/style";
-import { TableHeaderContainer } from "../../components/Filter/style";
 import { Tag } from "../../styles/styled-component/style";
 import { dataFormUtil } from "../../helper";
 import AddModal from "../../components/Modal/AddCompany";
@@ -62,9 +61,11 @@ export default function Company() {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
-  const { data, isLoading, refetch } = useQuery<IGetCompaniesRes, AxiosError>(
-    [KEY_COMPANY_LIST],
-    () => apis.companiesApi.list({ searchType: filter, searchValue })
+  const { data, isLoading, refetch } = useQuery<
+    IGetCompaniesRes,
+    IErrorResponse
+  >([KEY_COMPANY_LIST], () =>
+    apis.companiesApi.list({ searchType: filter, searchValue })
   );
   const { mutate: editMutate } = useMutation<
     IPutCompanyRes,
@@ -199,7 +200,7 @@ export default function Company() {
   if (isLoading) return <div>loading...</div>;
   return (
     <TableCustomContainer>
-      <TableHeaderContainer>
+      <div className="flex mb-4">
         <FilterContainer
           value={{ filter, searchValue }}
           handleFilter={handleFilter}
@@ -209,9 +210,9 @@ export default function Company() {
           handleSearch={handleSearch}
         />
         <Button variant="outlined" onClick={handleOpenAdd}>
-          추가
+          업체 추가
         </Button>
-      </TableHeaderContainer>
+      </div>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

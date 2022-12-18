@@ -12,7 +12,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { TableCustomContainer } from "../../../components/Table/style";
-import { TableHeaderContainer } from "../../../components/Filter/style";
 import * as companyActions from "../../../store/modules/componies/index";
 import * as reviewActions from "../../../store/modules/reviews/index";
 import { Editor as ToastEditor } from "@toast-ui/react-editor";
@@ -82,7 +81,7 @@ export default function Review() {
     <TableCustomContainer>
       <form onSubmit={handleSubmit}>
         {/* 업체 종류, 지역 */}
-        <TableHeaderContainer>
+        <div className="flex">
           <FormControl required fullWidth className="custom-field" size="small">
             <InputLabel id="companyCategories">업체종류</InputLabel>
             <Select
@@ -119,7 +118,7 @@ export default function Review() {
           <Button type="button" variant="contained" onClick={handleSearch}>
             검색
           </Button>
-        </TableHeaderContainer>
+        </div>
         {/* 업체명 */}
         <Row>
           <Autocomplete

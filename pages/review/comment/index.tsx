@@ -1,14 +1,13 @@
 import React, { SyntheticEvent, useState } from "react";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import Button from "@mui/material/Button";
-import CommentIcon from "@mui/icons-material/Comment";
 import * as reviewActions from "../../../store/modules/reviews/index";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { CommentContainer } from "../../../styles/styled-component/style";
+import { IconComment } from "../../../components/Icon";
 
 type TCommnet = {
   reviewId: string | string[] | undefined;
@@ -59,8 +58,8 @@ const Comment = ({ reviewId, commentLists }: TCommnet) => {
     );
   };
   return (
-    <CommentContainer>
-      <h4>댓글</h4>
+    <div>
+      <p>댓글</p>
       <ul className="comment-list-area">
         {commentLists?.map((comment) => (
           <li key={comment.id}>
@@ -105,21 +104,20 @@ const Comment = ({ reviewId, commentLists }: TCommnet) => {
           </li>
         ))}
       </ul>
-      <div className="comment-area">
-        <CommentIcon />
+      <div className="flex items-center">
+        <IconComment />
         <TextareaAutosize
+          className="w-full border-2 rounded-md text-sm p-2 outline-0 font-normal ml-3"
           aria-label="empty textarea"
-          placeholder=""
+          placeholder="댓글을 달아주세요"
           value={comment}
           onChange={onChangeComment}
         />
       </div>
-      <div className="button-area">
-        <Button variant="outlined" onClick={onSubmit}>
-          등록
-        </Button>
-      </div>
-    </CommentContainer>
+      <Button variant="outlined" onClick={onSubmit} className="mt-3">
+        등록
+      </Button>
+    </div>
   );
 };
 
