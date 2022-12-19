@@ -68,9 +68,15 @@ export default function DetailReview() {
                 <IconArrowRightSmall />
               </div>
             ) : singleList?.categories?.[0]?.code === 2 ? (
-              <GrassIcon className="grass" />
+              <div className="flex items-center text-[green]">
+                먹이
+                <IconArrowRightSmall />
+              </div>
             ) : singleList?.categories?.[0]?.code === 3 ? (
-              <SmartToyIcon />
+              <div className="flex items-center text-[green]">
+                용품
+                <IconArrowRightSmall />
+              </div>
             ) : null}
           </>
         </div>

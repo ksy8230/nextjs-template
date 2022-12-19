@@ -1,4 +1,9 @@
-export interface IGetReviewsRes extends Array<any> {}
+import { TCategory } from "../../store/modules/componies/type";
+
+export const KEY_REVIEW = "review";
+export const KEY_REVIEW_LIST = "reviews";
+
+export interface IGetReviewsRes extends Array<any> {} // todo
 export interface IGetReviewsReq {
   searchType?: string;
   searchValue?: any;
@@ -9,7 +14,7 @@ export interface IGetReviewRes {
   name: string;
   title: string;
   content: string;
-  categories: any;
+  categories: TCategory[];
   comment_count: number;
   comment_set: any;
   rate: number;
@@ -19,4 +24,28 @@ export interface IGetReviewRes {
 }
 export interface IGetReviewReq {
   id: any;
+}
+
+export interface IPutReviewRes {} // todo
+export interface IPutReviewReq extends IGetReviewReq {
+  data: {
+    categories: TCategory[];
+    name: string;
+    region: number;
+    title: string;
+    content: string;
+    rate: number;
+    username: string;
+  };
+}
+
+export interface IPostReviewRes {} // todo
+export interface IPostReviewReq {
+  categories: TCategory[];
+  name: string;
+  region: number;
+  title: string;
+  content: string;
+  rate: number;
+  username: string;
 }

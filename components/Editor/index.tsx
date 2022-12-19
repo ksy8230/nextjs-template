@@ -18,6 +18,7 @@ const TuiEditor = ({ content = "", editorRef }: IEditorProps) => {
           height="600px"
           hideModeSwitch={true}
           language="ko-KR"
+          autofocus={false}
         />
       )}
     </>

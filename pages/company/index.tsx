@@ -54,8 +54,10 @@ export default function Company() {
   const [currentCompany, setCurrentCompany] = useState<TCompony | null>(null);
   const [categories, setCategories] = useState<CategoryCode[]>([]); // 업체종류
   const [region, setRegion] = useState(1); // 지역
-  const [filter, setFilter] = useState(""); // 검색 카테고리
-  const [searchValue, setSearchValue] = useState<any>(null || []); // 검색어
+  const [filter, setSearchType] = useState(""); // 검색 카테고리 (name,categories,region,username)
+  const [searchValue, setSearchValue] = useState<
+    TCategory["code"][] | number | string
+  >("" || []); // 검색어
 
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -172,27 +174,17 @@ export default function Company() {
     event: SelectChangeEvent<typeof categories>
   ) => setCategories(event.target.value as TCategory["code"][]);
 
-  // 필터 > 대표 필터 검색
-  const handleFilter = (event: SelectChangeEvent<string>) => {
-    // console.log("event.target.value", event.target.value);
-    setFilter(event.target.value);
+  // 필터 > 카테고리값
+  const handleSearchCategory = (event: SelectChangeEvent<string>) => {
+    setSearchType(event.target.value);
   };
 
-  // 필터 > 업체종류 검색
-  const handleFilterCategoriesValueChange = (
-    event: SelectChangeEvent<typeof categories>
+  // 필터 > 검색값
+  const handleSearchValue = (
+    event: SelectChangeEvent<TCategory["code"][] | number | string>
   ) => {
-    console.log("event.target.value", event.target.value);
-    setSearchValue(event.target.value as TCategory["code"][]);
+    setSearchValue(event.target.value);
   };
-
-  // 필터 > 지역 검색
-  const handleFilterRegionValueChange = (event: SelectChangeEvent<number>) =>
-    setSearchValue(event.target.value);
-
-  // 필터 > 검색어
-  const handleSearchValueChange = (event: SelectChangeEvent<string>) =>
-    setSearchValue(event.target.value);
 
   // 검색
   const handleSearch = () => refetch();
@@ -203,10 +195,8 @@ export default function Company() {
       <div className="flex mb-4">
         <FilterContainer
           value={{ filter, searchValue }}
-          handleFilter={handleFilter}
-          handleFilterCategoriesValueChange={handleFilterCategoriesValueChange}
-          handleFilterRegionValueChange={handleFilterRegionValueChange}
-          handleSearchValueChange={handleSearchValueChange}
+          handleFilter={handleSearchCategory}
+          handleChange={handleSearchValue}
           handleSearch={handleSearch}
         />
         <Button variant="outlined" onClick={handleOpenAdd}>
@@ -315,14 +305,14 @@ Company.getLayout = function getLayout(page: ReactElement) {
 };
 
 // 상세 페이지에서 활용 가능
-// export const getStaticProps = async () => {
-//   const queryClient = new QueryClient();
-//   await queryClient.prefetchQuery(KEY_COMPANY_LIST, () =>
-//     apis.companiesApi.list({ searchType: "", searchValue: "" })
-//   );
-//   return {
-//     props: {
-//       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
-//     },
-//   };
-// };
+export const getStaticProps = async () => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(KEY_COMPANY_LIST, () =>
+    apis.companiesApi.list({ searchType: "", searchValue: "" })
+  );
+  return {
+    props: {
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    },
+  };
+};

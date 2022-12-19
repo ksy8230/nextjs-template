@@ -13,20 +13,21 @@ import {
   ReviewBox,
   ReviewContainer,
 } from "../../styles/styled-component/style";
-import { IGetReviewsRes } from "../../api/reviews/types";
+import { IGetReviewsRes, KEY_REVIEW_LIST } from "../../api/reviews/types";
 import { IErrorResponse } from "../../api/companies/types";
 import { useQuery } from "react-query";
 import apis from "../../api";
 import { IconHeart } from "../../components/Icon";
 
 export default function Review() {
-  const { reviewList } = useSelector((state: RootState) => state.reviews);
+  // const { reviewList } = useSelector((state: RootState) => state.reviews);
 
   const { data, isLoading, refetch } = useQuery<IGetReviewsRes, IErrorResponse>(
-    ["reviews"],
+    [KEY_REVIEW_LIST],
     () => apis.reviewsApi.list({ searchType: "", searchValue: "" })
   );
 
+  if (isLoading) return <div>loading...</div>;
   return (
     <TableCustomContainer>
       <div className="text-right mb-4">

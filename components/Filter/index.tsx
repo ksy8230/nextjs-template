@@ -11,11 +11,9 @@ import { IconSearch } from "../Icon";
 
 const FilterContainer = ({
   value,
-  handleSearchValueChange,
-  handleFilterCategoriesValueChange,
-  handleFilterRegionValueChange,
   handleFilter,
   handleSearch,
+  handleChange,
 }: any) => {
   return (
     <FilterCustomContainer>
@@ -44,7 +42,7 @@ const FilterContainer = ({
             multiple
             label="categories"
             value={value.searchValue}
-            onChange={handleFilterCategoriesValueChange}
+            onChange={handleChange}
           >
             {CATEGORIES.map((item: typeof CATEGORIES[0], i) => (
               <MenuItem key={i} value={item.code}>
@@ -61,13 +59,14 @@ const FilterContainer = ({
             id="region"
             label="region"
             value={value.searchValue}
-            onChange={handleFilterRegionValueChange}
+            onChange={handleChange}
           >
-            {REGIONS.map((item: typeof REGIONS[0], i) => (
-              <MenuItem key={i} value={item.code}>
-                {item.name}
-              </MenuItem>
-            ))}
+            {REGIONS &&
+              REGIONS.map((item: typeof REGIONS[0], i) => (
+                <MenuItem key={i} value={item.code}>
+                  {item.name}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
       ) : (
@@ -78,7 +77,7 @@ const FilterContainer = ({
           fullWidth
           className="custom-control"
           size="small"
-          onChange={handleSearchValueChange}
+          onChange={handleChange}
         />
       )}
 

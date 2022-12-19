@@ -1,12 +1,22 @@
 import { socialApiClient } from "../client";
-import { IGetReviewReq, IGetReviewsReq } from "./types";
+import {
+  IGetReviewReq,
+  IGetReviewsReq,
+  IPostReviewReq,
+  IPutReviewReq,
+} from "./types";
 
 export const api = {
-  register(data: any) {
-    return socialApiClient.post("/review/register/", data);
+  async register(data: IPostReviewReq) {
+    const res = await socialApiClient.post("/review/register/", data);
+    return res.data;
   },
-  update(data: any, id: number) {
-    return socialApiClient.put(`/review/update/${id}/`, data);
+  async update(data: IPutReviewReq) {
+    const res = await socialApiClient.put(
+      `/review/update/${data.id}/`,
+      data.data
+    );
+    return res.data;
   },
   delete(id: string) {
     return socialApiClient.delete(`/review/delete/${id}/`);
@@ -20,7 +30,6 @@ export const api = {
     return res.data;
   },
   async singleList(data: IGetReviewReq) {
-    console.log(data.id);
     const res = await socialApiClient.get(`/review/${data.id}`);
     return res.data;
   },

@@ -7,6 +7,7 @@ import { wrapper } from "../store";
 import axios from "axios";
 import { HYDRATE } from "next-redux-wrapper";
 import { AppContextType } from "next/dist/shared/lib/utils";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -27,6 +28,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Hydrate state={pageProps?.dehydrateState}>
         <Component {...pageProps} />
       </Hydrate>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }
