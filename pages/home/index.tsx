@@ -1,110 +1,85 @@
 import { ReactElement } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout";
-import { AppDispatch } from "../../store";
-import { HomeInformation } from "../../styles/styled-component/style";
-// import {
-//   HomeH3,
-//   HomeHistory,
-//   HomeInformation,
-//   HomeProject,
-//   HomeSkill,
-// } from "./style";
-
-// const getAsync = createAsyncThunk(`counter/getAsync`, async () => {
-//   //   const result = await apis.counterApi.getCount();
-//   //   return result.data;
-//   return {
-//     payload: await apis.counterApi.getCount(),
-//   };
-// });
+import Image from "next/image";
+import mainBunnyImag from "../../public/images/main-bunny.png";
+import mainHospitalImag from "../../public/images/main-hospital.png";
+import mainGrassImag from "../../public/images/main-grass.png";
+import mainProductImag from "../../public/images/main-product.png";
+import { IconCheck } from "../../components/Icon";
 
 export default function Home() {
-  const dispatch = useDispatch<AppDispatch>();
-  const counter = useSelector(({ counter }: any) => counter);
-
-  // const plus = useCallback(() => {
-  //   dispatch(counterActions.increment());
-  // }, [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(counterActions.getAsync());
-  // }, []);
-
-  // useEffect(() => {
-  //   dispatch(userActions.whoIam());
-  // }, []);
-
   return (
-    <div>
-      <HomeInformation>
-        <p>@mollang</p>
-        <h2>몰랑</h2>
-        <p>입맛이 까다로운 🐰</p>
-      </HomeInformation>
-      {/* <HomeHistory>
-        <HomeH3>🧾 History</HomeH3>
-        <div className="box">
-          <div className="title">
-            <p>Company.</p>
-          </div>
-          <div className="desc">
-            <p>Front Developer</p>
-            <p className="date">2020.04 ~ Present</p>
-            <p className="tags">
-              <span className="tag">React</span>
-              <span className="tag">Typescript</span>
+    <div className="max-w-[62.5rem] m-auto pb-[8rem]">
+      {/* 컨텐츠 헤더 */}
+      <div className="flex items-center justify-around mb-5">
+        <div className="flex items-center">
+          <p className="text-xl font-bold text-[#1F1C1D]">
+            내가 필요해서 만든,
+            <br />
+            토끼를 키우면서 필요한 업체 정보들
+          </p>
+        </div>
+        <div>
+          <Image src={mainBunnyImag} width="200" height="251" />
+        </div>
+      </div>
+      {/* 컨텐츠 */}
+      <div className="content-list">
+        <div className="flex items-center justify-around bg-[#1F1C1D] text-white rounded-md pt-8 pb-8 mb-4">
+          <Image src={mainHospitalImag} />
+          <div>
+            <p className="text-lg font-medium mb-4">
+              전국구에 있는 토끼 병원 리스트
             </p>
+            <ul>
+              <li className="flex items-center text-sm mb-2">
+                <IconCheck />
+                병원 이름, 전화번호, 위치 정보 정리
+              </li>
+              <li className="flex items-center text-sm">
+                <IconCheck />
+                급할 때 찾으면 안 보이더라 기록해 놓자
+              </li>
+            </ul>
           </div>
         </div>
-        <div className="box">
-          <div className="title">
-            <p>Company.</p>
-          </div>
-          <div className="desc">
-            <p>Web Publisher</p>
-            <p className="date">2017.01 ~ 2020.12</p>
-            <p className="tags">
-              <span className="tag">Javascript</span>
-              <span className="tag">html</span>
+        <div className="flex items-center justify-around bg-[#1F1C1D] text-white rounded-md pt-8 pb-8 mb-4">
+          <Image src={mainGrassImag} />
+          <div>
+            <p className="text-lg font-medium mb-4">
+              전국구에 있는 토끼 먹이 리스트
             </p>
+            <ul>
+              <li className="flex items-center text-sm mb-2">
+                <IconCheck />
+                업체 이름, 전화번호, 링크 정리
+              </li>
+              <li className="flex items-center text-sm">
+                <IconCheck />
+                급할 때 찾으면 안 보이더라 기록해 놓자
+              </li>
+            </ul>
           </div>
         </div>
-      </HomeHistory>
-
-      <HomeProject>
-        <button type="button">Project 👉</button>
-      </HomeProject>
-
-      <HomeSkill>
-        <HomeH3>✨ Skill</HomeH3>
-        <ul>
-          <li>
-            <a href="">Reactjs</a>
-          </li>
-          <li>
-            <a href="">Nextjs</a>
-          </li>
-          <li>
-            <a href="">Typescript</a>
-          </li>
-          <li>
-            <a href="">Docker</a>
-          </li>
-          <li>
-            <a href="">Git</a>
-          </li>
-          <li>
-            <a href="">Javascript</a>
-          </li>
-          <li>
-            <a href="">Django</a>
-          </li>
-          <li>
-            <a href="">Figma</a>
-          </li>
-        </ul>
-      </HomeSkill> */}
+        <div className="flex items-center justify-around bg-[#1F1C1D] text-white rounded-md pt-8 pb-8">
+          <Image src={mainProductImag} />
+          <div>
+            <p className="text-lg font-medium mb-4">
+              전국구에 있는 토끼 용품 리스트
+            </p>
+            <ul>
+              <li className="flex items-center text-sm mb-2">
+                <IconCheck />
+                업체 이름, 전화번호, 링크 정리
+              </li>
+              <li className="flex items-center text-sm">
+                <IconCheck />
+                급할 때 찾으면 안 보이더라 기록해 놓자
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,35 +1,39 @@
 import { socialApiClient } from "../client";
+import {
+  IGetReviewReq,
+  IGetReviewsReq,
+  IPostReviewReq,
+  IPutReviewReq,
+} from "./types";
 
 export const api = {
-  register(data: any) {
-    return socialApiClient.post("/review/register/", data);
+  async register(data: IPostReviewReq) {
+    const res = await socialApiClient.post("/review/register/", data);
+    return res.data;
   },
-  update(data: any, id: number) {
-    return socialApiClient.put(`/review/update/${id}/`, data);
+  async update(data: IPutReviewReq) {
+    const res = await socialApiClient.put(
+      `/review/update/${data.id}/`,
+      data.data
+    );
+    return res.data;
   },
   delete(id: string) {
     return socialApiClient.delete(`/review/delete/${id}/`);
   },
-  list(data: any) {
-    console.log(data);
+  async list(data: IGetReviewsReq) {
     let uri = "/review/list";
     if (data.searchType) {
       uri = `/review/list?searchType=${data.searchType}&searchValue=${data.searchValue}`;
     }
-    return socialApiClient.get(uri);
+    const res = await socialApiClient.get(uri);
+    return res.data;
   },
-  singleList(id: string) {
-    console.log(id);
-    return socialApiClient.get(`/review/${id}`);
+  async singleList(data: IGetReviewReq) {
+    const res = await socialApiClient.get(`/review/${data.id}`);
+    return res.data;
   },
-  // listAND(data: any) {
-  //   console.log(data);
-  //   let uri = "/company/listWrite";
-  //   if (data.searchCategory) {
-  //     uri = `/company/listWrite?searchCategory=${data.searchCategory}&searchRegion=${data.searchRegion}`;
-  //   }
-  //   return socialApiClient.get(uri);
-  // },
+
   registerComment(data: any) {
     return socialApiClient.post(`/review/${data.id}/comments/`, data.data);
   },

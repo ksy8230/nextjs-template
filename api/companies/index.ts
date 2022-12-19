@@ -1,30 +1,30 @@
-import { TCompony } from "../../store/modules/componies/type";
 import { socialApiClient } from "../client";
+import {
+  IGetCompaniesReq,
+  IPutCompanyReq,
+  IPostCompanyReq,
+  IDeleteCompanyReq,
+} from "./types";
 
 export const api = {
-  register(data: TCompony) {
-    return socialApiClient.post("/company/register/", data);
+  async register(data: IPostCompanyReq) {
+    const res = await socialApiClient.post("/company/register/", data);
+    return res.data;
   },
-  update(data: any, id: number) {
-    return socialApiClient.put(`/company/update/${id}`, data);
+  async update(data: IPutCompanyReq) {
+    const res = await socialApiClient.put(`/company/update/${data.id}`, data);
+    return res.data;
   },
-  delete(id: number) {
-    return socialApiClient.delete(`/company/delete/${id}`);
+  async delete(data: IDeleteCompanyReq) {
+    const res = await socialApiClient.delete(`/company/delete/${data.id}`);
+    return res.data;
   },
-  list(data: any) {
-    console.log(data);
+  async list(data: IGetCompaniesReq) {
     let uri = "/company/list";
     if (data.searchType) {
       uri = `/company/list?searchType=${data.searchType}&searchValue=${data.searchValue}`;
     }
-    return socialApiClient.get(uri);
-  },
-  listAND(data: any) {
-    console.log(data);
-    let uri = "/company/listWrite";
-    if (data.searchCategory) {
-      uri = `/company/listWrite?searchCategory=${data.searchCategory}&searchRegion=${data.searchRegion}`;
-    }
-    return socialApiClient.get(uri);
+    const res = await socialApiClient.get(uri);
+    return res.data;
   },
 };

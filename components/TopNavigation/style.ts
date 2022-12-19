@@ -1,23 +1,5 @@
 import styled from "styled-components";
 
-export const Nav = styled.nav`
-  padding: 2rem 0;
-  > a {
-    margin-right: 1.5rem;
-    font-weight: 600;
-    color: #555;
-  }
-  address {
-    p {
-    }
-  }
-`;
-
-export const NavContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 export const ModalContent = styled.div`
   position: absolute;
   top: 50%;

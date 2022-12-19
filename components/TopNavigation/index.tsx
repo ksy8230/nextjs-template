@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React, { SyntheticEvent, useEffect, useState } from "react";
-import { Nav, NavContainer } from "./style";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -11,6 +10,7 @@ import { IUser } from "../../store/modules/users/type";
 import LoginModal from "./components/LoginModal";
 import SignupModal from "./components/SignupModal";
 import UserEditModal from "./components/UserEditModal";
+import { IconHome } from "../Icon";
 
 interface IState extends RootState {
   hydrate: IUser;
@@ -96,19 +96,25 @@ const TopNavigation = () => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    dispatch(userActions.whoIam());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(userActions.whoIam());
+  // }, []);
 
   return (
     <>
-      <NavContainer>
-        <Nav>
-          <Link href="/home">Home</Link>
-          <Link href="/company">업체 등록</Link>
-          <Link href="/review">업체 리뷰</Link>
-        </Nav>
-        <Nav>
+      <div className="flex items-center justify-between max-w-[80rem] m-auto">
+        <div className="pt-4 pb-4 flex items-center">
+          <span>
+            <Link href="/home">HOME</Link>
+          </span>
+          <span className="ml-4">
+            <Link href="/company">업체 조회</Link>
+          </span>
+          <span className="ml-4">
+            <Link href="/review">업체 리뷰</Link>
+          </span>
+        </div>
+        <div className="pt-4 pb-4 flex items-center">
           {hydrate?.username || me?.username ? (
             <>
               <Button
@@ -146,8 +152,8 @@ const TopNavigation = () => {
               </Button>
             </>
           )}
-        </Nav>
-      </NavContainer>
+        </div>
+      </div>
 
       <LoginModal
         openModal={openLogin}

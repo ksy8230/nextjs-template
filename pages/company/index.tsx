@@ -1,7 +1,7 @@
-import { ReactElement, SyntheticEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { ReactElement, SyntheticEvent, useState } from "react";
+import { useSelector } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout";
-import { AppDispatch, RootState } from "../../store";
+import { RootState } from "../../store";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -19,42 +19,102 @@ import {
   TCompony,
   TRegisterCompony,
 } from "../../store/modules/componies/type";
-import * as companyActions from "../../store/modules/componies/index";
 import { CATEGORIES, REGIONS } from "../../constants";
 import { TableCustomContainer } from "../../components/Table/style";
-import { TableHeaderContainer } from "../../components/Filter/style";
 import { Tag } from "../../styles/styled-component/style";
 import { dataFormUtil } from "../../helper";
 import AddModal from "../../components/Modal/AddCompany";
 import EditModal from "../../components/Modal/EditCompany";
 import DeleteModal from "../../components/Modal/DeleteCompany";
 import FilterContainer from "../../components/Filter";
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
+import apis from "../../api";
+import { AxiosError } from "axios";
+import {
+  IErrorResponse,
+  IGetCompaniesRes,
+  IPutCompanyRes,
+  IPutCompanyReq,
+  IPostCompanyRes,
+  IPostCompanyReq,
+  KEY_COMPANY_LIST,
+  IDeleteCompanyRes,
+  IDeleteCompanyReq,
+} from "../../api/companies/types";
 
 export default function Company() {
-  const dispatch = useDispatch<AppDispatch>();
+  const queryClient = useQueryClient();
   const { me } = useSelector((state: RootState) => state.users);
-  const { companyList } = useSelector((state: RootState) => state.companies);
   const [currentCompany, setCurrentCompany] = useState<TCompony | null>(null);
-  const [categories, setCategories] = useState<CategoryCode[]>([]); // 업체종류 선택값
-  const [region, setRegion] = useState(1); // 지역 선택값
-  const [filter, setFilter] = useState(""); // 필터 선택값
-  const [searchValue, setSearchValue] = useState<any>(null); // 검색어 값
+  const [categories, setCategories] = useState<CategoryCode[]>([]); // 업체종류
+  const [region, setRegion] = useState(1); // 지역
+  const [filter, setSearchType] = useState(""); // 검색 카테고리 (name,categories,region,username)
+  const [searchValue, setSearchValue] = useState<
+    TCategory["code"][] | number | string
+  >("" || []); // 검색어
 
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
+  const { data, isLoading, refetch } = useQuery<
+    IGetCompaniesRes,
+    IErrorResponse
+  >([KEY_COMPANY_LIST], () =>
+    apis.companiesApi.list({ searchType: filter, searchValue })
+  );
+  const { mutate: editMutate } = useMutation<
+    IPutCompanyRes,
+    IErrorResponse,
+    IPutCompanyReq
+  >((form) => apis.companiesApi.update(form), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(KEY_COMPANY_LIST);
+      handleCloseEdit();
+    },
+  });
+  const { mutate: addMutate } = useMutation<
+    IPostCompanyRes,
+    IErrorResponse,
+    IPostCompanyReq
+  >((form) => apis.companiesApi.register(form), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(KEY_COMPANY_LIST);
+      handleCloseAdd();
+    },
+  });
+  const { mutate: deleteMutate } = useMutation<
+    IDeleteCompanyRes,
+    IErrorResponse,
+    IDeleteCompanyReq
+  >((form) => apis.companiesApi.delete(form), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(KEY_COMPANY_LIST);
+      handleCloseDelete();
+    },
+  });
+
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
 
   const handleOpenEdit = (id: number) => {
-    const idx = companyList.findIndex((c) => c.id == id);
-    const current = companyList[idx];
-    setCurrentCompany(current);
-    setOpenEdit(true);
-    setCategories(current.categories?.map((c) => c.code));
-    setRegion(current.region);
-    setOpenEdit(true);
+    const idx = data?.findIndex((c) => c.id === id);
+    if (idx || idx === 0) {
+      const current = data?.[idx];
+      if (current) {
+        setCurrentCompany(current);
+        setOpenEdit(true);
+        setCategories(current.categories?.map((c) => c.code));
+        setRegion(current.region);
+        setOpenEdit(true);
+      }
+    }
   };
   const handleCloseEdit = () => {
     setCurrentCompany(null);
@@ -62,10 +122,14 @@ export default function Company() {
   };
 
   const handleOpenDelete = (id: number) => {
-    const idx = companyList.findIndex((c) => c.id == id);
-    const current = companyList[idx];
-    setCurrentCompany(current);
-    setOpenDelete(true);
+    const idx = data?.findIndex((c) => c.id == id);
+    if (idx || idx === 0) {
+      const current = data?.[idx];
+      if (current) {
+        setCurrentCompany(current);
+        setOpenDelete(true);
+      }
+    }
   };
   const handleCloseDelete = () => setOpenDelete(false);
 
@@ -73,42 +137,35 @@ export default function Company() {
   const onSubmitAdd = (e: SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as EventTarget & TRegisterCompony;
-    let result = categories.map((v) => ({ code: v }));
     const form = {
       name: target.name.value,
-      categories: result,
+      categories: categories.map((v) => ({ code: v })),
       region: region,
       phone: target.phone?.value,
       siteUrl: target.siteUrl?.value,
     };
-    console.log(form);
-    // dispatch(companyActions.registerCompany(form));
+    addMutate({ ...form });
   };
   // 수정 폼 전송
   const onSubmitEdit = (e: SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as EventTarget & TRegisterCompony;
-    let result = categories.map((v) => ({ code: v }));
-
     if (currentCompany) {
       const form = {
         id: currentCompany.id,
         name: target.name.value,
-        categories: result,
+        categories: categories.map((v) => ({ code: v })),
         region: region,
         phone: target.phone?.value,
         siteUrl: target.siteUrl?.value,
         username: me?.username,
       };
-      dispatch(
-        companyActions.updateCompany({ data: form, id: currentCompany.id })
-      );
+      editMutate({ ...form });
     }
   };
   // 삭제 확인
-  const onConfirmDelete = () => {
-    currentCompany && dispatch(companyActions.deleteCompany(currentCompany.id));
-  };
+  const onConfirmDelete = () =>
+    currentCompany && deleteMutate({ id: currentCompany.id });
 
   const handleRegionChange = (event: SelectChangeEvent<number>) =>
     setRegion(event.target.value as number);
@@ -117,59 +174,35 @@ export default function Company() {
     event: SelectChangeEvent<typeof categories>
   ) => setCategories(event.target.value as TCategory["code"][]);
 
-  // 필터 > 대표 필터 검색
-  const handleFilter = (event: SelectChangeEvent<string>) =>
-    setFilter(event.target.value);
-
-  // 필터 > 업체종류 검색
-  const handleFilterCategoriesValueChange = (
-    event: SelectChangeEvent<typeof categories>
-  ) => {
-    setSearchValue(event.target.value as TCategory["code"][]);
+  // 필터 > 카테고리값
+  const handleSearchCategory = (event: SelectChangeEvent<string>) => {
+    setSearchType(event.target.value);
   };
 
-  // 필터 > 지역 검색
-  const handleFilterRegionValueChange = (event: SelectChangeEvent<number>) =>
+  // 필터 > 검색값
+  const handleSearchValue = (
+    event: SelectChangeEvent<TCategory["code"][] | number | string>
+  ) => {
     setSearchValue(event.target.value);
-
-  // 필터 > 검색어
-  const handleSearchValueChange = (event: SelectChangeEvent<string>) =>
-    setSearchValue(event.target.value);
+  };
 
   // 검색
-  const handleSearch = () => {
-    dispatch(
-      companyActions.getCompanies({
-        searchType: filter,
-        searchValue: searchValue, // ex. [1,2,3]
-      })
-    );
-  };
+  const handleSearch = () => refetch();
 
-  useEffect(() => {
-    dispatch(
-      companyActions.getCompanies({
-        searchType: filter,
-        searchValue,
-      })
-    );
-  }, []);
-
+  if (isLoading) return <div>loading...</div>;
   return (
     <TableCustomContainer>
-      <TableHeaderContainer>
+      <div className="flex mb-4">
         <FilterContainer
           value={{ filter, searchValue }}
-          handleFilter={handleFilter}
-          handleFilterCategoriesValueChange={handleFilterCategoriesValueChange}
-          handleFilterRegionValueChange={handleFilterRegionValueChange}
-          handleSearchValueChange={handleSearchValueChange}
+          handleFilter={handleSearchCategory}
+          handleChange={handleSearchValue}
           handleSearch={handleSearch}
         />
         <Button variant="outlined" onClick={handleOpenAdd}>
-          추가
+          업체 추가
         </Button>
-      </TableHeaderContainer>
+      </div>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -185,7 +218,7 @@ export default function Company() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {companyList?.map((row, i) => (
+            {data?.map((row, i) => (
               <TableRow
                 key={i}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -269,4 +302,17 @@ export default function Company() {
 
 Company.getLayout = function getLayout(page: ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>;
+};
+
+// 상세 페이지에서 활용 가능
+export const getStaticProps = async () => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(KEY_COMPANY_LIST, () =>
+    apis.companiesApi.list({ searchType: "", searchValue: "" })
+  );
+  return {
+    props: {
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    },
+  };
 };

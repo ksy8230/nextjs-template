@@ -1,219 +1,139 @@
-import {
-  ReactElement,
-  SyntheticEvent,
-  useEffect,
-  useState,
-  useRef,
-  ChangeEvent,
-} from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { ReactElement, SyntheticEvent, useRef } from "react";
+import { useSelector } from "react-redux";
 import DefaultLayout from "../../../components/DefaultLayout";
-// import {
-//   Button,
-//   TextField,
-//   Autocomplete,
-//   InputLabel,
-//   FormControl,
-//   Select,
-//   SelectChangeEvent,
-//   MenuItem,
-//   Rating,
-//   Typography,
-// } from "@mui/material";
-import { AppDispatch, RootState } from "../../../store";
+import { RootState } from "../../../store";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import Rating from "@mui/material/Rating";
-import Typography from "@mui/material/Typography";
-import { TableCustomContainer } from "../../../components/Table/style";
-import { TableHeaderContainer } from "../../../components/Filter/style";
-import * as companyActions from "../../../store/modules/componies/index";
-import * as reviewActions from "../../../store/modules/reviews/index";
-import { Editor as ToastEditor } from "@toast-ui/react-editor";
 import { useRouter } from "next/router";
 import { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import { requestFetch } from "../../../api/types";
 import { IReview } from "../../../store/modules/reviews/type";
-import { TCategory } from "../../../store/modules/componies/type";
-import { CATEGORIES, REGIONS } from "../../../constants";
 import { Row } from "../../../styles/styled-component/style";
-const Editor = dynamic(() => import("../../../components/Editor/index"), {
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
+import apis from "../../../api";
+import {
+  IGetReviewRes,
+  IPutReviewReq,
+  IPutReviewRes,
+  KEY_REVIEW,
+  KEY_REVIEW_LIST,
+} from "../../../api/reviews/types";
+import { IErrorResponse } from "../../../api/companies/types";
+import { IconArrowRightSmall } from "../../../components/Icon";
+import { ROUTE_PATH } from "../../../constants";
+
+const NoSSREditor = dynamic(() => import("../../../components/Editor/index"), {
   ssr: false,
 });
 
-export default function ReviewEdit(props: IReview) {
-  const dispatch = useDispatch<AppDispatch>();
-  const editorRef = useRef<ToastEditor>(null);
+export default function ReviewEdit() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { me } = useSelector((state: RootState) => state.users);
-  const { companyList } = useSelector((state: RootState) => state.companies);
-  const [categories, setCategories] = useState(
-    props.categories?.map((ctr) => ctr.code)
-  ); // 업체종류
-  const [region, setRegion] = useState(props.region); // 지역
-  const [companyName, setCompanyName] = useState(props.name); // 업체명
-  const [title, setTitle] = useState(props.title); // 제목
-  const [content, setContent] = useState(props.content); // 내용
-  const [rate, setRate] = useState<number>(props.rate); // 평점
 
-  // 검색
-  const handleSearch = () => {
-    dispatch(
-      companyActions.getCompaniesAND({
-        searchCategory: categories,
-        searchRegion: region,
-      })
-    );
-  };
+  const editorRef = useRef<any>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+
+  const { data: singleList, isLoading } = useQuery<
+    IGetReviewRes,
+    IErrorResponse
+  >([KEY_REVIEW, router], () =>
+    apis.reviewsApi.singleList({ id: router.query.id })
+  );
+  const { mutate: editMutate } = useMutation<
+    IPutReviewRes,
+    IErrorResponse,
+    IPutReviewReq
+  >((form) => apis.reviewsApi.update(form), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(KEY_REVIEW_LIST);
+      router.push(ROUTE_PATH.review);
+    },
+  });
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    let result = categories.map((v) => ({ code: v }));
-
-    const form = {
-      categories: result,
-      name: companyName,
-      region,
-      title,
-      content,
-      rate,
-      username: me?.username,
-    };
-
-    dispatch(reviewActions.updateReview({ data: form, id: props.id }));
-  };
-
-  const handleCategoriesChange = (
-    event: SelectChangeEvent<typeof categories>
-  ) => setCategories(event.target.value as TCategory["code"][]);
-
-  const handleRegionChange = (event: SelectChangeEvent<number>) =>
-    setRegion(event.target.value as number);
-
-  const onChangeCompanyName = (e: SyntheticEvent, newValue: string | null) => {
-    newValue && setCompanyName(newValue);
-  };
-
-  const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
-
-  const onChangeEditor = () => {
-    if (editorRef.current) {
-      const data = editorRef.current.getInstance().getHTML();
-      setContent(data);
+    const target = e.target as EventTarget & { rate: { value: number } };
+    if (singleList) {
+      const form = {
+        categories: singleList?.categories && singleList?.categories,
+        name: singleList?.name,
+        region: singleList?.region,
+        title: titleRef?.current?.value || "", //
+        content: editorRef?.current?.getInstance().getHTML(), //
+        rate: target.rate?.value, //
+        username: me?.username,
+      };
+      editMutate({ data: form, id: singleList.id });
     }
   };
 
-  const onChangeRate = (e: SyntheticEvent, newValue: number | null) => {
-    newValue && setRate(newValue);
-  };
-
-  useEffect(() => {
-    router.query && dispatch(reviewActions.getSingleReview(router.query.id));
-  }, []);
-
+  if (isLoading) return <div>loading...</div>;
   return (
-    <TableCustomContainer>
+    <div>
+      <div className="flex items-center mb-3">
+        <div>
+          <>
+            {singleList?.categories?.[0]?.code === 1 ? (
+              <div className="flex items-center text-[green]">
+                병원
+                <IconArrowRightSmall />
+              </div>
+            ) : singleList?.categories?.[0]?.code === 2 ? (
+              <div className="flex items-center text-[green]">
+                먹이
+                <IconArrowRightSmall />
+              </div>
+            ) : singleList?.categories?.[0]?.code === 3 ? (
+              <div className="flex items-center text-[green]">
+                용품
+                <IconArrowRightSmall />
+              </div>
+            ) : null}
+          </>
+        </div>
+        <div>{singleList?.name}</div>
+      </div>
       <form onSubmit={handleSubmit}>
-        {/* 업체 종류, 지역 */}
-        <TableHeaderContainer>
-          <FormControl required fullWidth className="custom-field" size="small">
-            <InputLabel id="companyCategories">업체종류</InputLabel>
-            <Select
-              labelId="companyCategories"
-              id="companyCategories"
-              multiple
-              value={categories || []}
-              label="companyCategories"
-              onChange={handleCategoriesChange}
-            >
-              {CATEGORIES?.map((item: typeof CATEGORIES[0], i) => (
-                <MenuItem key={i} value={item.code}>
-                  {item.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl required fullWidth className="custom-field" size="small">
-            <InputLabel id="region">지역</InputLabel>
-            <Select
-              labelId="region"
-              id="region"
-              value={region}
-              label="region"
-              onChange={handleRegionChange}
-            >
-              {REGIONS?.map((item: typeof REGIONS[0], i) => (
-                <MenuItem key={i} value={item.code}>
-                  {item.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button type="button" variant="contained" onClick={handleSearch}>
-            검색
-          </Button>
-        </TableHeaderContainer>
-        {/* 업체명 */}
-        <Row>
-          <Autocomplete
-            freeSolo
-            id="name"
-            size="small"
-            options={companyList.map((list) => list.name)}
-            getOptionLabel={(option) => option}
-            defaultValue={props.name}
-            onChange={onChangeCompanyName}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                label="업체명"
-                placeholder="업체명을 고르거나 입력해주세요"
-                required
-              />
-            )}
-          />
-        </Row>
         {/* 제목 */}
         <Row>
           <TextField
+            inputRef={titleRef}
             id="title"
             label="제목"
             variant="outlined"
             fullWidth
             className="custom-field"
             size="small"
-            value={title}
-            onChange={onChangeTitle}
+            defaultValue={singleList?.title}
             required
           />
         </Row>
         {/* 편집기 */}
         <Row>
-          <Editor
+          <NoSSREditor
+            content={singleList?.content ? singleList?.content : ""}
             editorRef={editorRef}
-            text={content}
-            onChange={onChangeEditor}
           />
         </Row>
         {/* 평점 */}
         <Row>
-          <Typography component="legend">업체 리뷰 점수</Typography>
-          <Rating name="rate" value={rate} onChange={onChangeRate} />
+          <p className="font-base text-xs text-[gray]">업체 리뷰 점수</p>
+          <Rating name="rate" defaultValue={singleList?.rate} />
         </Row>
         <Button variant="outlined" type="submit">
           수정
         </Button>
       </form>
-    </TableCustomContainer>
+    </div>
   );
 }
 
@@ -232,19 +152,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { id } = context.params as any;
-  try {
-    const review = await requestFetch<IReview>(
-      `http://localhost:8000/review/${id}`
-    );
-    return {
-      props: review,
-    };
-  } catch (err) {
-    console.error(err);
-    return {
-      props: {},
-    };
-  }
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(KEY_REVIEW, () =>
+    apis.reviewsApi.singleList({ id })
+  );
+  return {
+    props: {
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    },
+  };
 };
 
 ReviewEdit.getLayout = function getLayout(page: ReactElement) {

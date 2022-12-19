@@ -1,13 +1,11 @@
-import { ReactElement, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { ReactElement } from "react";
+import { useSelector } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout";
 import Button from "@mui/material/Button";
-import { AppDispatch, RootState } from "../../store";
+import { RootState } from "../../store";
 import { TableCustomContainer } from "../../components/Table/style";
 import Link from "next/link";
-import * as reviewActions from "../../store/modules/reviews/index";
 import Rating from "@mui/material/Rating";
-import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import GrassIcon from "@mui/icons-material/Grass";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PersonIcon from "@mui/icons-material/Person";
@@ -15,29 +13,37 @@ import {
   ReviewBox,
   ReviewContainer,
 } from "../../styles/styled-component/style";
+import { IGetReviewsRes, KEY_REVIEW_LIST } from "../../api/reviews/types";
+import { IErrorResponse } from "../../api/companies/types";
+import { useQuery } from "react-query";
+import apis from "../../api";
+import { IconHeart } from "../../components/Icon";
 
 export default function Review() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { reviewList } = useSelector((state: RootState) => state.reviews);
+  // const { reviewList } = useSelector((state: RootState) => state.reviews);
 
-  useEffect(() => {
-    dispatch(reviewActions.getReviews({ searchType: "", searchValue: "" }));
-  }, []);
+  const { data, isLoading, refetch } = useQuery<IGetReviewsRes, IErrorResponse>(
+    [KEY_REVIEW_LIST],
+    () => apis.reviewsApi.list({ searchType: "", searchValue: "" })
+  );
 
+  if (isLoading) return <div>loading...</div>;
   return (
     <TableCustomContainer>
-      <Button variant="outlined">
-        <Link href="/review/write">리뷰 쓰기</Link>
-      </Button>
+      <div className="text-right mb-4">
+        <Button variant="outlined">
+          <Link href="/review/write">리뷰 쓰기</Link>
+        </Button>
+      </div>
       <ReviewContainer>
-        {reviewList?.map((list: any, i: number) => (
+        {data?.map((list, i) => (
           <ReviewBox key={i}>
             <Link href={`/review/${list.id}`}>링크</Link>
             <div className="content">
               <div className="thumb">
                 <>
                   {list.categories?.[0]?.code === 1 ? (
-                    <LocalHospitalIcon className="hospital" />
+                    <IconHeart />
                   ) : list.categories?.[0]?.code === 2 ? (
                     <GrassIcon className="grass" />
                   ) : list.categories?.[0]?.code === 3 ? (
@@ -49,7 +55,6 @@ export default function Review() {
                 <p className="name">{list.name}</p>
                 <p>{list.title}</p>
                 <div className="rate">
-                  {/* <Typography component="legend">업체 리뷰 점수</Typography> */}
                   <Rating name="simple-controlled" value={list.rate} />
                 </div>
               </div>

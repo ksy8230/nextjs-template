@@ -1,4 +1,7 @@
 /* @import url("./modal.css"); */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html,
 body,
@@ -20,23 +23,6 @@ a {
   box-sizing: border-box;
 }
 
-.default-layout__top-navigation {
-  width: 80%;
-  margin: 0 auto;
-}
-
-.default-layout__container__content {
-  width: 80%;
-  margin: 0 auto 3rem;
-}
-
-.default-layout__footer {
-  padding: 1rem 0;
-  background-color: #f6f9fc;
-  color: #8898aa;
-  border-top: 1px solid #d8e0e7;
-}
-
 /* medium-editor css */
 .medium-editor-element {
   margin: 0.5rem 0 0.5rem;
@@ -45,11 +31,6 @@ a {
   border: 1px solid rgba(0, 0, 0, 0.23);
   border-radius: 4px;
   min-height: 100px !important;
-}
-.detail-textfield {
-  border: 0;
-  min-height: 250px !important;
-  border-bottom: 1px solid #ddd;
 }
 
 .medium-editor-element:focus-visible {

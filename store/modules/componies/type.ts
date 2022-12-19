@@ -21,8 +21,7 @@ export type TCompony = {
 export type TRegisterCompony = {
   name: { value: string };
   categories: { value: string[] };
-  // region: { value: number };
-  region: { value: any };
+  region: { value: number };
   phone?: { value: string };
   siteUrl?: { value: string };
 };

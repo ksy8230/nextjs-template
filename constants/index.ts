@@ -32,3 +32,9 @@ export const FILTER_MAIN_LIST = [
   { code: "region", name: "지역" },
   { code: "username", name: "등록자" },
 ];
+
+export const ROUTE_PATH = {
+  home: "/home",
+  company: "/company",
+  review: "/review",
+};
