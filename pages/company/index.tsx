@@ -303,16 +303,3 @@ export default function Company() {
 Company.getLayout = function getLayout(page: ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>;
 };
-
-// 상세 페이지에서 활용 가능
-export const getStaticProps = async () => {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(KEY_COMPANY_LIST, () =>
-    apis.companiesApi.list({ searchType: "", searchValue: "" })
-  );
-  return {
-    props: {
-      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
-    },
-  };
-};

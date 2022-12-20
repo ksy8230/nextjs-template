@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { ModalContent, SignUpContainer, SignUpSuccess } from "../../style";
+import { ModalContent, SignUpContainer } from "../../style";
 import TextField from "@mui/material/TextField";
 import { IUserEditModal } from "../types";
 
@@ -23,9 +23,9 @@ const UserEditModal = ({
       <ModalContent>
         <SignUpContainer>
           {isEdited ? (
-            <SignUpSuccess>
+            <div>
               <p>수정에 성공했습니다! 😆</p>
-            </SignUpSuccess>
+            </div>
           ) : (
             <form onSubmit={onSubmit}>
               <TextField

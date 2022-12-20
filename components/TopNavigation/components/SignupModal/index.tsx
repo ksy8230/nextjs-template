@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { ModalContent, SignUpContainer, SignUpSuccess } from "../../style";
+import { ModalContent, SignUpContainer } from "../../style";
 import TextField from "@mui/material/TextField";
 import { IRegisterModal } from "../types";
 
@@ -22,10 +22,10 @@ const SignupModal = ({
       <ModalContent>
         <SignUpContainer>
           {isRegistered ? (
-            <SignUpSuccess>
+            <div>
               <p>회원가입에 성공했습니다!</p>
               <p>로그인 해주세요 😆</p>
-            </SignUpSuccess>
+            </div>
           ) : (
             <form onSubmit={onSubmit}>
               <TextField

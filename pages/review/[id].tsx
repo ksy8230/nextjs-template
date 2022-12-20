@@ -2,18 +2,13 @@ import React, { ReactElement, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import DefaultLayout from "../../components/DefaultLayout";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store";
 import Rating from "@mui/material/Rating";
 import Button from "@mui/material/Button";
 import Link from "next/link";
 import Comment from "./comment";
-import GrassIcon from "@mui/icons-material/Grass";
-import SmartToyIcon from "@mui/icons-material/SmartToy";
 import {
   IconArrowRightSmall,
   IconCalendarSmall,
-  IconHeart,
   IconUserSmall,
 } from "../../components/Icon";
 import apis from "../../api";
@@ -25,7 +20,6 @@ const NoSSRViewer = dynamic(() => import("../../components/Viewer"), {
 });
 
 export default function DetailReview() {
-  // const { singleList } = useSelector((state: RootState) => state.reviews);
   const router = useRouter();
 
   const {

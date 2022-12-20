@@ -1,6 +1,7 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import Footer from "./Footer";
 import TopNavigation from "./TopNavigation";
+import { GetStaticPaths, GetStaticProps } from "next";
 /** 사용하는 페이지
  * 홈
  * 분석결과

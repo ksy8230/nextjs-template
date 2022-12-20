@@ -1,13 +1,20 @@
 import { socialApiClient } from "../client";
 import { storage } from "../constants";
-import { IJwtPayload, TLoginData } from "./type";
+import {
+  IJwtPayload,
+  IPostLogInReq,
+  IPostRegisterReq,
+  IPostUpdateReq,
+} from "./type";
 import jwt, { JwtPayload } from "jwt-decode";
 import { loginUtil } from "../../helper";
 import { AxiosResponse } from "axios";
+import Cookies from "js-cookie";
 
 export const api = {
-  login(data: TLoginData) {
-    return socialApiClient.post("/account/login/", data);
+  async login(data: IPostLogInReq) {
+    const res = await socialApiClient.post("/account/login/", data);
+    return res.data;
   },
 
   async validToken() {
@@ -79,19 +86,24 @@ export const api = {
     return { csrftoken };
   },
 
-  register(data: any) {
-    return socialApiClient.post("/account/register/", data);
+  async register(data: IPostRegisterReq) {
+    const res = await socialApiClient.post("/account/register/", data);
+    return res.data;
   },
 
-  whoIam() {
-    return socialApiClient.get("/account/whoIam/");
+  async whoIam() {
+    const res = await socialApiClient.get("/account/whoIam/");
+    return res.data;
   },
 
-  logout() {
-    return socialApiClient.post("/account/logout/", {});
+  async logout() {
+    const res = await socialApiClient.post("/account/logout/", {});
+    Cookies.remove("csrftoken");
+    return res.data;
   },
 
-  updateUser(data: any) {
-    return socialApiClient.patch("/account/updateUser/", data);
+  async updateUser(data: IPostUpdateReq) {
+    const res = await socialApiClient.patch("/account/updateUser/", data);
+    return res.data;
   },
 };

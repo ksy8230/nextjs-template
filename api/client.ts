@@ -1,22 +1,15 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-// import dotenv from "dotenv";
 import apis from "./index";
 
-// dotenv.config();
+// 서버 주소 자주 바뀌는 경우 uri 바라보도록 설정
+// let windowProtocol, windowHost, windowPort;
+// if (typeof window !== "undefined") {
+//   windowProtocol = window?.location.protocol; // http:
+//   windowHost = window.location.host.split(":")[0]; // localhost
+//   windowPort = window.location.port; // 80
+// }
 
-let windowProtocol, windowHost, windowPort;
-if (typeof window !== "undefined") {
-  // localhost 일시 포트가 localhost: 뒤에 있는 번호
-  windowProtocol = window?.location.protocol; // http:
-  windowHost = window.location.host.split(":")[0]; // local.mist.com
-  windowPort = window.location.port; // 80
-}
-
-const SOCIAL_SERVER_URL = `${
-  process.env.NEXT_PUBLIC_PROTOCOL || windowProtocol
-}//${process.env.NEXT_PUBLIC_API_HOST || windowHost}:${
-  process.env.NEXT_PUBLIC_PORT || windowPort
-}${process.env.NEXT_PUBLIC_PREFIX}`;
+const SOCIAL_SERVER_URL = `${process.env.NEXT_PUBLIC_PROTOCOL}//${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_PORT}${process.env.NEXT_PUBLIC_PREFIX}`;
 console.log("SOCIAL_SERVER_URL", SOCIAL_SERVER_URL);
 
 function apiRequestProtocol() {

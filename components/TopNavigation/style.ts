@@ -45,9 +45,3 @@ export const SignUpContainer = styled.div`
     margin-bottom: 1rem;
   }
 `;
-
-export const SignUpSuccess = styled.div`
-  p {
-    text-align: center;
-  }
-`;

@@ -29,6 +29,7 @@ import {
 import { IErrorResponse } from "../../../api/companies/types";
 import { IconArrowRightSmall } from "../../../components/Icon";
 import { ROUTE_PATH } from "../../../constants";
+import { KEY_ME } from "../../../api/users/type";
 
 const NoSSREditor = dynamic(() => import("../../../components/Editor/index"), {
   ssr: false,
@@ -45,9 +46,14 @@ export default function ReviewEdit() {
   const { data: singleList, isLoading } = useQuery<
     IGetReviewRes,
     IErrorResponse
-  >([KEY_REVIEW, router], () =>
-    apis.reviewsApi.singleList({ id: router.query.id })
+  >(
+    [KEY_REVIEW, router],
+    () => apis.reviewsApi.singleList({ id: router.query.id }),
+    {
+      refetchOnWindowFocus: false,
+    }
   );
+
   const { mutate: editMutate } = useMutation<
     IPutReviewRes,
     IErrorResponse,
@@ -137,31 +143,32 @@ export default function ReviewEdit() {
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const reviewList = await requestFetch<IReview[]>(
-    `http://localhost:8000/review/list`
-  );
-  const paths = reviewList.map((post) => ({
-    params: { id: `${post.id}` },
-  }));
-  return {
-    paths,
-    fallback: true,
-  };
-};
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const reviewList = await requestFetch<IReview[]>(
+//     `http://localhost:8000/review/list`
+//   );
+//   const paths = reviewList.map((post) => ({
+//     params: { id: `${post.id}` },
+//   }));
+//   return {
+//     paths,
+//     fallback: true,
+//   };
+// };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { id } = context.params as any;
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(KEY_REVIEW, () =>
-    apis.reviewsApi.singleList({ id })
-  );
-  return {
-    props: {
-      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
-    },
-  };
-};
+// export const getStaticProps: GetStaticProps = async (context) => {
+//   const { id } = context.params as any;
+//   const queryClient = new QueryClient();
+//   await queryClient.prefetchQuery(KEY_REVIEW, () =>
+//     apis.reviewsApi.singleList({ id })
+//   );
+//   await queryClient.prefetchQuery(KEY_ME, () => apis.usersApi.whoIam());
+//   return {
+//     props: {
+//       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+//     },
+//   };
+// };
 
 ReviewEdit.getLayout = function getLayout(page: ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>;

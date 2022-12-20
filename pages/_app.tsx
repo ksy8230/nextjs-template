@@ -8,6 +8,7 @@ import axios from "axios";
 import { HYDRATE } from "next-redux-wrapper";
 import { AppContextType } from "next/dist/shared/lib/utils";
 import { ReactQueryDevtools } from "react-query/devtools";
+import apis from "../api";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -23,10 +24,18 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [queryClient] = useState(() => new QueryClient());
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  return getLayout(
+  // return getLayout(
+  //   <QueryClientProvider client={queryClient}>
+  //     <Hydrate state={pageProps?.dehydrateState}>
+  //       <Component {...pageProps} />
+  //     </Hydrate>
+  //     <ReactQueryDevtools />
+  //   </QueryClientProvider>
+  // );
+  return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps?.dehydrateState}>
-        <Component {...pageProps} />
+        {getLayout(<Component {...pageProps} />)}
       </Hydrate>
       <ReactQueryDevtools />
     </QueryClientProvider>
@@ -36,14 +45,24 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 // 내 정보 전역 상태에 주입하기
 MyApp.getInitialProps = wrapper.getInitialPageProps(
   (store) => async (context: any) => {
-    // AppContextType -> any
     const { ctx, Component } = context;
     let pageProps = {};
 
     const allCookies = ctx.req?.headers.cookie;
+    // ctx.req?.cookies && ctx.req?.cookies["sessionid"]
+
     if (allCookies) {
-      const res = await axios.get("http://localhost:8000/account/whoIam/", {
-        withCredentials: true,
+      console.log("ssr allCookies==========", allCookies);
+      console.log("process.env.BACKEND_URL==========", process.env.BACKEND_URL);
+      console.log(
+        "process.env.NEXT_PUBLIC_BACKEND_URL==========",
+        process.env.NEXT_PUBLIC_BACKEND_URL
+      );
+      let url = `${
+        process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL
+      }/account/whoIam/`;
+
+      const res = await axios.get(url as string, {
         headers: {
           Cookie: allCookies as string,
         },
@@ -54,6 +73,7 @@ MyApp.getInitialProps = wrapper.getInitialPageProps(
           payload: { users: { me: res.data } },
         });
       }
+      console.log("store", store.getState());
     }
 
     // Component의 context로 ctx를 넣어주자
